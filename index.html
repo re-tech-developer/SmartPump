@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>🌾 Smart Pump</title>
+    <title>Re-Tech AgroPump</title>
     <script src="https://cdn.tailwindcss.com">
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <style>
         * {
             -webkit-tap-highlight-color: transparent;
@@ -17,7 +18,7 @@
             height: 100%;
             overflow: hidden;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #f0f4f0;
+            background: #f0f6f0;
         }
         body {
             max-width: 420px;
@@ -27,6 +28,119 @@
             height: 100vh;
             height: 100dvh;
             position: relative;
+            background: linear-gradient(180deg, #f0f6f0 0%, #e8f0e8 100%);
+        }
+
+        /* PREMIUM HEADER */
+        .header-premium {
+            background: linear-gradient(135deg, #0a2e0f 0%, #1a4d2a 50%, #0d3b1a 100%);
+            padding: 12px 16px 10px;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+        }
+        .header-premium::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .header-premium::after {
+            content: '';
+            position: absolute;
+            bottom: -60%;
+            left: -10%;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .header-premium .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        .header-premium .brand .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #0a2e0f;
+            box-shadow: 0 2px 12px rgba(251, 191, 36, 0.4);
+        }
+        .header-premium .brand .name {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: white;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+        }
+        .header-premium .brand .sub {
+            font-size: 0.55rem;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        .header-premium .brand .highlight {
+            color: #fbbf24;
+        }
+        .header-premium .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+        }
+        .header-premium .header-actions button {
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            color: rgba(255, 255, 255, 0.8);
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .header-premium .header-actions button:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+        .header-premium .header-actions button:active {
+            transform: scale(0.92);
+        }
+        .header-premium .header-actions .badge-container {
+            position: relative;
+        }
+        .header-premium .header-actions .badge-dot {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 16px;
+            height: 16px;
+            background: #ef4444;
+            border-radius: 50%;
+            font-size: 0.45rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #0a2e0f;
         }
 
         .card {
@@ -37,8 +151,8 @@
 
         .pulse-dot {
             display: inline-block;
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
             animation: pulse 1.5s ease-in-out infinite;
         }
@@ -52,6 +166,10 @@
                 opacity: 0.5;
                 transform: scale(0.85);
             }
+        }
+        .pulse-dot.off {
+            animation: none;
+            background: #9ca3af !important;
         }
 
         .signal-bar {
@@ -212,6 +330,10 @@
         .device-item:last-child {
             border-bottom: none;
         }
+        .device-item.active-device {
+            background: #dcfce7;
+            border-left: 3px solid #16a34a;
+        }
 
         .device-dot {
             width: 7px;
@@ -222,7 +344,7 @@
 
         .toast-farm {
             position: fixed;
-            top: 65px;
+            top: 75px;
             left: 50%;
             transform: translateX(-50%) translateY(-10px);
             padding: 8px 18px;
@@ -260,7 +382,7 @@
         .modal-box {
             background: white;
             border-radius: 18px;
-            max-width: 370px;
+            max-width: 380px;
             width: 100%;
             padding: 18px;
             animation: modalPop 0.2s ease;
@@ -291,50 +413,6 @@
             border-bottom: none;
         }
 
-        .header-compact {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 6px 12px 4px;
-            flex-shrink: 0;
-            background: white;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        /* MODE SELECTOR - WARNA PEMBEDA JELAS */
-        .mode-selector {
-            display: flex;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 2px solid #d1d5db;
-        }
-        .mode-selector button {
-            flex: 1;
-            padding: 4px 12px;
-            font-size: 0.65rem;
-            font-weight: 700;
-            border: none;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            background: #f3f4f6;
-            color: #9ca3af;
-        }
-        .mode-selector button.active-manual {
-            background: #1e40af !important;
-            color: white !important;
-            border-color: #1e40af;
-            box-shadow: 0 2px 8px rgba(30, 64, 175, 0.3);
-        }
-        .mode-selector button.active-auto {
-            background: #16a34a !important;
-            color: white !important;
-            border-color: #16a34a;
-            box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3);
-        }
-        .mode-selector button:active {
-            transform: scale(0.95);
-        }
-
         .badge-xs {
             font-size: 0.5rem;
             padding: 1px 6px;
@@ -352,6 +430,7 @@
             padding: 4px 0;
             border-bottom: 1px solid #f3f4f6;
             font-size: 0.75rem;
+            align-items: center;
         }
         .detail-row:last-child {
             border-bottom: none;
@@ -370,17 +449,184 @@
             min-height: 0;
         }
 
-        /* tombol hapus device */
-        .delete-btn:hover {
-            background: #fee2e2 !important;
-            color: #dc2626 !important;
+        .focus-card {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .focus-card.on {
+            border-color: #16a34a;
+            background: #f0fdf4;
+        }
+        .focus-card.off {
+            border-color: #9ca3af;
+            background: #f9fafb;
+        }
+        .focus-card.sch {
+            border-color: #eab308;
+            background: #fefce8;
         }
 
-        .text-green-700 {
-            color: #2e7d32;
+        .focus-card .status-big {
+            font-size: 1.5rem;
+            font-weight: 800;
         }
-        .bg-green-700 {
-            background: #2e7d32;
+        .focus-card .timer-big {
+            font-size: 1.8rem;
+            font-weight: 700;
+            font-family: monospace;
+        }
+        .focus-card .info-row {
+            display: flex;
+            gap: 12px;
+            font-size: 0.7rem;
+            color: #6b7280;
+            flex-wrap: wrap;
+        }
+        .focus-card .info-row .normal {
+            color: #16a34a;
+        }
+        .focus-card .info-row .overload {
+            color: #dc2626;
+            font-weight: 700;
+        }
+        .focus-card .info-row .running {
+            color: #16a34a;
+        }
+        .focus-card .info-row .stopped {
+            color: #9ca3af;
+        }
+
+        .focus-card .bottom-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4px;
+            padding-top: 4px;
+            border-top: 1px solid #e5e7eb;
+        }
+        .focus-card .bottom-row .label {
+            font-size: 0.6rem;
+            color: #9ca3af;
+        }
+        .focus-card .bottom-row .value {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        .focus-card .bottom-row .cost {
+            color: #d97706;
+        }
+
+        .mode-device-btn.active-manual {
+            background: #1e40af !important;
+            color: white !important;
+        }
+        .mode-device-btn.active-auto {
+            background: #16a34a !important;
+            color: white !important;
+        }
+
+        .timer-input {
+            width: 60px;
+            padding: 2px 4px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            text-align: center;
+            background: #f9fafb;
+        }
+        .timer-input:focus {
+            outline: 2px solid #2e7d32;
+            outline-offset: 1px;
+        }
+
+        .btn-on-off {
+            padding: 6px 16px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-on-off:active {
+            transform: scale(0.93);
+        }
+        .btn-on-off:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        .btn-on-off.on {
+            background: #16a34a;
+            color: white;
+        }
+        .btn-on-off.off {
+            background: #dc2626;
+            color: white;
+        }
+
+        /* QR Code styling */
+        .qr-placeholder {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            position: relative;
+        }
+        .qr-placeholder .qr-pattern {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 2px;
+            width: 80px;
+            height: 80px;
+        }
+        .qr-placeholder .qr-pattern .dot {
+            width: 100%;
+            height: 100%;
+            background: #1a4d2a;
+            border-radius: 2px;
+        }
+        .qr-placeholder .qr-pattern .dot.empty {
+            background: transparent;
+        }
+        .qr-placeholder .qr-pattern .dot.corner {
+            background: #0a2e0f;
+        }
+        .qr-placeholder .scan-overlay {
+            position: absolute;
+            inset: 4px;
+            border: 2px solid #16a34a;
+            border-radius: 8px;
+            animation: scanPulse 2s ease-in-out infinite;
+            opacity: 0.3;
+        }
+        @keyframes scanPulse {
+            0%,
+            100% {
+                opacity: 0.2;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        /* Pairing code styling */
+        .pairing-code {
+            font-family: monospace;
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 4px;
+            color: #0a2e0f;
+            background: #f3f6f3;
+            padding: 8px 16px;
+            border-radius: 10px;
+            display: inline-block;
         }
     </style>
 </head>
@@ -389,20 +635,31 @@
     <!-- ===== TOAST ===== -->
     <div id="toast" class="toast-farm"></div>
 
-    <!-- ===== HEADER ===== -->
-    <header class="header-compact">
-        <div class="flex items-center gap-2">
-            <span class="text-lg">🌾</span>
-            <span class="font-bold text-gray-800 text-sm">Smart Pump</span>
-        </div>
-        <div class="flex items-center gap-3">
-            <button id="notifBtn" class="relative text-gray-600 text-sm">
-                <i class="fas fa-bell"></i>
-                <span id="notifBadge" class="absolute -top-1 -right-2 bg-red-500 text-white text-[7px] w-4 h-4 rounded-full flex items-center justify-center font-bold">3</span>
-            </button>
-            <button id="menuBtn" class="text-gray-600 text-sm">
-                <i class="fas fa-bars"></i>
-            </button>
+    <!-- ===== HEADER PREMIUM ===== -->
+    <header class="header-premium">
+        <div class="flex items-center justify-between">
+            <div class="brand">
+                <div class="logo-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <div>
+                    <div class="name">
+                        Re-Tech <span class="highlight">AgroPump</span>
+                    </div>
+                    <div class="sub">Smart Irrigation Control</div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="badge-container">
+                    <button id="notifBtn" class="text-sm">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <span class="badge-dot" id="notifBadge">3</span>
+                </div>
+                <button id="menuBtn" class="text-sm">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -412,68 +669,52 @@
         <!-- ===== PAGE HOME ===== -->
         <div id="pageHome" class="page active">
 
-            <!-- Signal & Mode -->
-            <div class="flex items-center justify-between gap-2 flex-shrink-0 py-1">
-                <div class="flex items-center gap-2">
-                    <i class="fas fa-signal text-green-600 text-sm"></i>
-                    <div class="flex gap-0.5">
-                        <div id="sig1" class="signal-bar bg-green-500 w-4"></div>
-                        <div id="sig2" class="signal-bar bg-green-500 w-4"></div>
-                        <div id="sig3" class="signal-bar bg-green-500 w-4"></div>
-                        <div id="sig4" class="signal-bar bg-green-500 w-4"></div>
-                        <div id="sig5" class="signal-bar bg-gray-300 w-4"></div>
-                    </div>
-                    <span id="signalPercent" class="text-xs font-bold text-green-700">85%</span>
+            <!-- Signal -->
+            <div class="flex items-center gap-2 flex-shrink-0 py-1">
+                <i class="fas fa-signal text-green-600 text-sm"></i>
+                <div class="flex gap-0.5">
+                    <div id="sig1" class="signal-bar bg-green-500 w-4"></div>
+                    <div id="sig2" class="signal-bar bg-green-500 w-4"></div>
+                    <div id="sig3" class="signal-bar bg-green-500 w-4"></div>
+                    <div id="sig4" class="signal-bar bg-green-500 w-4"></div>
+                    <div id="sig5" class="signal-bar bg-gray-300 w-4"></div>
                 </div>
-                <div class="mode-selector w-28">
-                    <button id="modeManual" class="active-manual">Manual</button>
-                    <button id="modeAuto">Auto</button>
-                </div>
+                <span id="signalPercent" class="text-xs font-bold text-green-700">85%</span>
+                <span class="text-[8px] text-gray-400 ml-auto">ID: <span id="deviceIdDisplay" class="font-mono">RT-001</span></span>
             </div>
 
-            <!-- Status Card -->
-            <div class="card p-2.5 flex items-center justify-between flex-shrink-0 mt-0.5">
-                <div class="flex items-center gap-3">
-                    <div class="flex flex-col items-center">
-                        <span id="statusDot" class="pulse-dot bg-green-500"></span>
-                        <span id="statusLabel" class="text-[9px] font-bold text-green-700">RUN</span>
-                    </div>
+            <!-- FOCUS DEVICE CARD -->
+            <div id="focusCard" class="card focus-card on p-3 flex-shrink-0 mt-0.5 cursor-pointer">
+                <div class="flex items-start justify-between">
                     <div>
-                        <div class="text-lg font-bold text-gray-800 font-mono" id="timerDisplay">01:23:45</div>
-                        <div class="flex items-center gap-2 text-[9px] text-gray-400">
-                            <span id="overloadLabel" class="text-green-600">● Normal</span>
+                        <div class="status-big" id="focusStatusBig">RUN</div>
+                        <div class="timer-big" id="focusTimerBig">01:23:47</div>
+                        <div class="info-row mt-0.5">
+                            <span id="focusOverloadInfo" class="normal">● Normal</span>
                             <span>|</span>
-                            <span id="deviceNameLabel">Sawah Utara</span>
+                            <span id="focusRunningInfo" class="running">● RUN</span>
+                            <span>|</span>
+                            <span id="focusNameInfo" class="text-gray-600">Sawah Utara</span>
                         </div>
                     </div>
-                </div>
-                <div class="flex gap-1.5">
-                    <button id="btnStart" class="btn-farm bg-green-600 text-white px-3 py-1.5 text-[10px] rounded-lg">
-                        <i class="fas fa-play text-[8px]"></i> ON
-                    </button>
-                    <button id="btnStop" class="btn-farm bg-red-500 text-white px-3 py-1.5 text-[10px] rounded-lg">
-                        <i class="fas fa-stop text-[8px]"></i> OFF
-                    </button>
-                </div>
-            </div>
-
-            <!-- Timer & Biaya -->
-            <div class="grid grid-cols-2 gap-2 flex-shrink-0 mt-1">
-                <div class="card p-1.5 flex items-center justify-between">
-                    <div class="flex items-center gap-1.5">
-                        <i class="fas fa-clock text-green-600 text-[10px]"></i>
-                        <span class="text-[9px] text-gray-500">Jadwal</span>
+                    <div class="flex gap-1.5">
+                        <button id="focusBtnOn" class="btn-on-off on">
+                            <i class="fas fa-play text-[10px]"></i> ON
+                        </button>
+                        <button id="focusBtnOff" class="btn-on-off off">
+                            <i class="fas fa-stop text-[10px]"></i> OFF
+                        </button>
                     </div>
-                    <span id="scheduleDisplay" class="text-[10px] font-semibold text-gray-700">06:00-18:00</span>
-                    <button id="editScheduleBtn" class="text-[9px] text-green-700 font-medium">✏️</button>
                 </div>
-                <div class="card p-1.5 flex items-center justify-between">
-                    <div class="flex items-center gap-1.5">
-                        <i class="fas fa-coins text-amber-500 text-[10px]"></i>
-                        <span class="text-[9px] text-gray-500">Biaya</span>
+                <div class="bottom-row">
+                    <div>
+                        <span class="label">Jadwal</span>
+                        <span class="value" id="focusScheduleInfo">06:00-18:00</span>
                     </div>
-                    <span id="costDisplay" class="text-[10px] font-bold text-amber-600">Rp 0</span>
-                    <button id="editCostBtn" class="text-[9px] text-green-700 font-medium">⚙️</button>
+                    <div>
+                        <span class="label">Biaya</span>
+                        <span class="value cost" id="focusCostInfo">Rp 6.982</span>
+                    </div>
                 </div>
             </div>
 
@@ -508,36 +749,6 @@
 
         </div>
 
-        <!-- ===== PAGE TIMER ===== -->
-        <div id="pageTimer" class="page">
-            <div class="scroll-area">
-                <div class="card p-4 space-y-3">
-                    <h4 class="font-bold text-gray-800 text-sm"><i class="fas fa-calendar-day text-green-600 mr-2"></i>Pengaturan Timer</h4>
-
-                    <div>
-                        <label class="text-xs font-medium text-gray-600">Jam ON</label>
-                        <input id="timerOnInput" type="time" value="06:00" class="w-full p-2 border border-gray-200 rounded-xl text-sm font-semibold" />
-                    </div>
-                    <div>
-                        <label class="text-xs font-medium text-gray-600">Jam OFF</label>
-                        <input id="timerOffInput" type="time" value="18:00" class="w-full p-2 border border-gray-200 rounded-xl text-sm font-semibold" />
-                    </div>
-
-                    <div>
-                        <label class="text-xs font-medium text-gray-600">Biaya per Jam (Rp)</label>
-                        <input id="costPerHourInput" type="number" value="5000" class="w-full p-2 border border-gray-200 rounded-xl text-sm font-semibold" />
-                    </div>
-
-                    <button id="saveTimerBtn" class="btn-farm bg-green-600 text-white text-sm">
-                        <i class="fas fa-save"></i> Simpan Timer
-                    </button>
-                    <button id="resetTimerBtn" class="btn-farm bg-gray-200 text-gray-700 text-sm">
-                        <i class="fas fa-undo"></i> Reset
-                    </button>
-                </div>
-            </div>
-        </div>
-
         <!-- ===== PAGE DEVICE ===== -->
         <div id="pageDevice" class="page">
             <div class="scroll-area">
@@ -558,6 +769,12 @@
             <div class="scroll-area">
                 <div class="card p-4 space-y-3">
                     <h4 class="font-bold text-gray-800 text-sm"><i class="fas fa-cog text-green-600 mr-2"></i>Pengaturan</h4>
+
+                    <div>
+                        <label class="text-xs font-medium text-gray-600">Biaya Default per Jam (Rp)</label>
+                        <input id="defaultCostInput" type="number" value="5000" class="w-full p-2 border border-gray-200 rounded-xl text-sm font-semibold mt-1" />
+                        <p class="text-[9px] text-gray-400 mt-1">*Biaya per device bisa diatur di pop-up device</p>
+                    </div>
 
                     <div class="flex items-center justify-between">
                         <div>
@@ -611,10 +828,6 @@
             <i class="fas fa-home"></i>
             <span>Home</span>
         </button>
-        <button class="nav-item" data-page="pageTimer">
-            <i class="fas fa-clock"></i>
-            <span>Timer</span>
-        </button>
         <button class="nav-item" data-page="pageDevice">
             <i class="fas fa-server"></i>
             <span>Device</span>
@@ -642,19 +855,59 @@
         // STATE
         // ============================================================
         const state = {
-            pumpStatus: 'RUNNING',
-            mode: 'manual',
+            focusDeviceId: 1,
             timerSeconds: 5025,
-            scheduleOn: '06:00',
-            scheduleOff: '18:00',
             signalStrength: 85,
-            costPerHour: 5000,
-            totalCost: 0,
-            devices: [
-                { id: 1, name: 'Sawah Utara', status: 'ON', duration: '01:23:45', totalSeconds: 5025 },
-                { id: 2, name: 'Sawah Selatan', status: 'OFF', duration: '--:--:--', totalSeconds: 0 },
-                { id: 3, name: 'Kebun Mangga', status: 'SCH', duration: '17:00', totalSeconds: 0 },
-            ],
+            defaultCost: 5000,
+            devices: [{
+                id: 1,
+                name: 'Sawah Utara',
+                status: 'ON',
+                duration: '01:23:45',
+                totalSeconds: 5025,
+                mode: 'manual',
+                costPerHour: 5000,
+                running: true,
+                overload: false,
+                scheduleOn: '06:00',
+                scheduleOff: '18:00',
+                deviceId: 'RT-001',
+                pairingCode: 'A7X9',
+                isPaired: true,
+                location: 'Ladang 1'
+            }, {
+                id: 2,
+                name: 'Sawah Selatan',
+                status: 'OFF',
+                duration: '--:--:--',
+                totalSeconds: 0,
+                mode: 'auto',
+                costPerHour: 4500,
+                running: false,
+                overload: false,
+                scheduleOn: '07:00',
+                scheduleOff: '17:00',
+                deviceId: 'RT-002',
+                pairingCode: 'B3K2',
+                isPaired: true,
+                location: 'Ladang 2'
+            }, {
+                id: 3,
+                name: 'Kebun Mangga',
+                status: 'SCH',
+                duration: '17:00',
+                totalSeconds: 0,
+                mode: 'auto',
+                costPerHour: 6000,
+                running: false,
+                overload: false,
+                scheduleOn: '08:00',
+                scheduleOff: '16:00',
+                deviceId: 'RT-003',
+                pairingCode: 'C5L7',
+                isPaired: true,
+                location: 'Kebun 3'
+            }, ],
             logs: [],
             notifications: ['✅ Pompa menyala 06:00', '⚠️ Sinyal lemah', '✅ Timer disimpan'],
             settings: { notifications: true, autoRetry: true },
@@ -662,6 +915,7 @@
             timerInterval: null,
             signalInterval: null,
             currentPage: 'pageHome',
+            lastScheduleCheck: 0,
         };
 
         // ============================================================
@@ -705,9 +959,74 @@
             return map[status] || 'bg-gray-100 text-gray-400';
         }
 
+        function getFocusDevice() {
+            return state.devices.find(d => d.id === state.focusDeviceId) || state.devices[0];
+        }
+
         function getDeviceCost(device) {
             if (device.status !== 'ON' || device.totalSeconds === 0) return 0;
-            return (device.totalSeconds / 3600) * state.costPerHour;
+            const cost = device.costPerHour || state.defaultCost;
+            return (device.totalSeconds / 3600) * cost;
+        }
+
+        function generatePairingCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let code = '';
+            for (let i = 0; i < 4; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
+        }
+
+        function generateDeviceId() {
+            const num = String(state.deviceCounter).padStart(3, '0');
+            return `RT-${num}`;
+        }
+
+        // ============================================================
+        // AUTO SCHEDULE
+        // ============================================================
+        function checkAllSchedules() {
+            const now = new Date();
+            const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+            state.devices.forEach(device => {
+                if (device.mode !== 'auto') return;
+                if (!device.scheduleOn || !device.scheduleOff) return;
+
+                const onParts = device.scheduleOn.split(':');
+                const offParts = device.scheduleOff.split(':');
+                const onTime = parseInt(onParts[0]) * 60 + parseInt(onParts[1]);
+                const offTime = parseInt(offParts[0]) * 60 + parseInt(offParts[1]);
+
+                const shouldBeOn = currentMinutes >= onTime && currentMinutes < offTime;
+
+                if (shouldBeOn && device.status === 'OFF') {
+                    device.status = 'ON';
+                    device.running = true;
+                    if (device.totalSeconds === undefined) device.totalSeconds = 0;
+                    device.duration = formatTime(device.totalSeconds || 0);
+                    addLog(`⏱️ ${device.name} otomatis ON (jadwal ${device.scheduleOn})`, 'success');
+                    showToast(`🟢 ${device.name} ON otomatis`, 'success');
+                    renderAll();
+                } else if (!shouldBeOn && device.status === 'ON') {
+                    if (device.totalSeconds === undefined) device.totalSeconds = 0;
+                    device.totalSeconds += state.timerSeconds;
+                    device.status = 'OFF';
+                    device.running = false;
+                    device.duration = formatTime(device.totalSeconds || 0);
+                    addLog(`⏱️ ${device.name} otomatis OFF (jadwal ${device.scheduleOff})`, 'info');
+                    showToast(`🔴 ${device.name} OFF otomatis`, 'info');
+                    renderAll();
+                } else if (shouldBeOn && device.status === 'SCH') {
+                    device.status = 'ON';
+                    device.running = true;
+                    if (device.totalSeconds === undefined) device.totalSeconds = 0;
+                    device.duration = formatTime(device.totalSeconds || 0);
+                    addLog(`⏱️ ${device.name} otomatis ON (dari SCH)`, 'success');
+                    renderAll();
+                }
+            });
         }
 
         // ============================================================
@@ -745,16 +1064,59 @@
         // ============================================================
         // RENDER
         // ============================================================
-        function renderStatus() {
-            const isRunning = state.pumpStatus === 'RUNNING';
-            document.getElementById('statusDot').className = `pulse-dot ${isRunning ? 'bg-green-500' : 'bg-gray-400'}`;
-            document.getElementById('statusLabel').textContent = isRunning ? 'RUN' : 'OFF';
-            document.getElementById('statusLabel').className = `text-[9px] font-bold ${isRunning ? 'text-green-700' : 'text-gray-400'}`;
-            document.getElementById('timerDisplay').textContent = formatTime(state.timerSeconds);
-            document.getElementById('overloadLabel').textContent = '● Normal';
-            document.getElementById('overloadLabel').className = 'text-green-600';
-            document.getElementById('btnStart').disabled = isRunning;
-            document.getElementById('btnStop').disabled = !isRunning;
+        function renderFocus() {
+            const device = getFocusDevice();
+            if (!device) return;
+
+            const card = document.getElementById('focusCard');
+            const isOn = device.status === 'ON';
+            const isOff = device.status === 'OFF';
+            const isSch = device.status === 'SCH';
+
+            card.className = `card focus-card p-3 flex-shrink-0 mt-0.5 cursor-pointer ${isOn ? 'on' : isOff ? 'off' : 'sch'}`;
+
+            document.getElementById('focusStatusBig').textContent = isOn ? 'RUN' : isOff ? 'OFF' : 'SCH';
+            document.getElementById('focusStatusBig').className =
+                `status-big ${isOn ? 'text-green-600' : isOff ? 'text-gray-400' : 'text-yellow-600'}`;
+
+            document.getElementById('focusTimerBig').textContent = isOn ? formatTime(device.totalSeconds || 0) : device
+                .duration;
+
+            const overloadEl = document.getElementById('focusOverloadInfo');
+            if (device.overload) {
+                overloadEl.textContent = '⚠️ OVERLOAD!';
+                overloadEl.className = 'overload';
+            } else {
+                overloadEl.textContent = '● Normal';
+                overloadEl.className = 'normal';
+            }
+
+            const runningEl = document.getElementById('focusRunningInfo');
+            if (device.running) {
+                runningEl.textContent = '● RUN';
+                runningEl.className = 'running';
+            } else {
+                runningEl.textContent = '● STOP';
+                runningEl.className = 'stopped';
+            }
+
+            document.getElementById('focusNameInfo').textContent = device.name;
+            document.getElementById('focusNameInfo').className = 'text-gray-600';
+
+            if (device.scheduleOn && device.scheduleOff) {
+                document.getElementById('focusScheduleInfo').textContent =
+                    `${device.scheduleOn}-${device.scheduleOff}`;
+            } else {
+                document.getElementById('focusScheduleInfo').textContent = 'No schedule';
+            }
+
+            const cost = getDeviceCost(device);
+            document.getElementById('focusCostInfo').textContent = `Rp ${Math.round(cost).toLocaleString()}`;
+
+            document.getElementById('focusBtnOn').disabled = isOn;
+            document.getElementById('focusBtnOff').disabled = isOff;
+
+            document.getElementById('deviceIdDisplay').textContent = device.deviceId || 'RT-001';
         }
 
         function renderSignal() {
@@ -768,87 +1130,28 @@
             document.getElementById('signalPercent').textContent = s + '%';
         }
 
-        function renderSchedule() {
-            document.getElementById('scheduleDisplay').textContent = `${state.scheduleOn}-${state.scheduleOff}`;
-            document.getElementById('timerOnInput').value = state.scheduleOn;
-            document.getElementById('timerOffInput').value = state.scheduleOff;
-            document.getElementById('costPerHourInput').value = state.costPerHour;
-        }
-
-        function renderCost() {
-            const hours = state.timerSeconds / 3600;
-            state.totalCost = hours * state.costPerHour;
-            document.getElementById('costDisplay').textContent = `Rp ${Math.round(state.totalCost).toLocaleString()}`;
-        }
-
         function renderDevices() {
             const container = document.getElementById('deviceList');
             container.innerHTML = state.devices.map(d => `
-                        <div class="device-item" data-id="${d.id}">
+                        <div class="device-item ${d.id === state.focusDeviceId ? 'active-device' : ''}" data-id="${d.id}">
                             <span class="device-dot ${getDotColor(d.status)}"></span>
                             <span class="text-[10px] font-medium text-gray-700 flex-1 truncate">${d.name}</span>
                             <span class="text-[9px] ${getStatusColor(d.status)} font-semibold">${getStatusText(d.status)}</span>
                             <span class="text-[9px] text-gray-400">${d.duration}</span>
-                            <button class="device-detail-btn text-gray-400 text-[10px] hover:text-green-600" data-id="${d.id}">
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
+                            <span class="text-[8px] ${d.mode === 'manual' ? 'text-blue-500' : 'text-green-500'} font-medium">${d.mode === 'manual' ? 'M' : 'A'}</span>
+                            ${d.scheduleOn && d.scheduleOff ? `<span class="text-[7px] text-gray-400">${d.scheduleOn}-${d.scheduleOff}</span>` : ''}
+                            <span class="text-[6px] text-gray-300 font-mono ml-1">${d.deviceId}</span>
                         </div>
                     `).join('');
 
-            // Detail button
-            document.querySelectorAll('.device-detail-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const id = parseInt(this.dataset.id);
-                    const d = state.devices.find(x => x.id === id);
-                    if (!d) return;
-
-                    const cost = getDeviceCost(d);
-                    const totalDurasi = d.totalSeconds > 0 ? secondsToHMS(d.totalSeconds) : 'Belum menyala';
-
-                    openModal(`
-                                <h4 class="font-bold text-gray-800 text-sm mb-1">📊 ${d.name}</h4>
-                                <p class="text-xs text-gray-400 mb-3">ID: ${d.id} | Status: <span class="${getStatusColor(d.status)} font-semibold">${d.status}</span></p>
-
-                                <div class="bg-gray-50 rounded-xl p-3 space-y-1.5 mb-3">
-                                    <div class="detail-row">
-                                        <span class="text-gray-500">Status</span>
-                                        <span class="font-semibold ${getStatusColor(d.status)}">${d.status}</span>
-                                    </div>
-                                    <div class="detail-row">
-                                        <span class="text-gray-500">Durasi Menyala</span>
-                                        <span class="font-semibold text-gray-700">${totalDurasi}</span>
-                                    </div>
-                                    <div class="detail-row">
-                                        <span class="text-gray-500">Biaya</span>
-                                        <span class="font-semibold text-amber-600">Rp ${Math.round(cost).toLocaleString()}</span>
-                                    </div>
-                                    <div class="detail-row">
-                                        <span class="text-gray-500">Terakhir Update</span>
-                                        <span class="text-gray-500 text-[10px]">${new Date().toLocaleTimeString('id-ID', {hour:'2-digit',minute:'2-digit'})}</span>
-                                    </div>
-                                </div>
-
-                                <div class="flex gap-2 mb-2">
-                                    <button class="btn-farm bg-green-600 text-white text-xs flex-1" onclick="controlDevice(${d.id},'ON')">
-                                        <i class="fas fa-play"></i> ON
-                                    </button>
-                                    <button class="btn-farm bg-red-500 text-white text-xs flex-1" onclick="controlDevice(${d.id},'OFF')">
-                                        <i class="fas fa-stop"></i> OFF
-                                    </button>
-                                </div>
-                                <button class="btn-farm bg-gray-200 text-gray-700 text-xs" onclick="closeModal()">Tutup</button>
-                            `);
-                });
-            });
-
-            // Click item
             document.querySelectorAll('.device-item').forEach(item => {
                 item.addEventListener('click', function() {
                     const id = parseInt(this.dataset.id);
-                    const d = state.devices.find(x => x.id === id);
-                    if (d) {
-                        this.querySelector('.device-detail-btn')?.click();
+                    const device = state.devices.find(d => d.id === id);
+                    if (device) {
+                        state.focusDeviceId = id;
+                        renderAll();
+                        showToast(`📱 Fokus: ${device.name} (${device.deviceId})`, 'info');
                     }
                 });
             });
@@ -858,13 +1161,21 @@
 
         function renderDeviceManagement() {
             const container = document.getElementById('deviceManagementList');
+            if (state.devices.length === 0) {
+                container.innerHTML =
+                    '<div class="text-center text-gray-400 text-xs py-4">Belum ada perangkat. Tambahkan perangkat baru.</div>';
+                return;
+            }
+
             container.innerHTML = state.devices.map(d => `
                         <div class="flex items-center justify-between bg-gray-50 rounded-xl px-3 py-2">
                             <div class="flex items-center gap-2">
                                 <span class="device-dot ${getDotColor(d.status)}"></span>
                                 <div>
                                     <p class="text-xs font-medium text-gray-800">${d.name}</p>
-                                    <p class="text-[9px] text-gray-400">ID: ${d.id} | Durasi: ${d.duration}</p>
+                                    <p class="text-[9px] text-gray-400">${d.deviceId} | ${d.location || 'Ladang'}</p>
+                                    <p class="text-[8px] text-gray-400">Mode: ${d.mode === 'manual' ? 'Manual' : 'Auto'} | Pair: ${d.isPaired ? '✅' : '⏳'}</p>
+                                    ${d.scheduleOn && d.scheduleOff ? `<p class="text-[8px] text-gray-400">Jadwal: ${d.scheduleOn}-${d.scheduleOff}</p>` : ''}
                                 </div>
                             </div>
                             <div class="flex items-center gap-2">
@@ -876,7 +1187,6 @@
                         </div>
                     `).join('');
 
-            // Tombol hapus - BERFUNGSI
             document.querySelectorAll('.device-delete-btn').forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     e.stopPropagation();
@@ -887,9 +1197,12 @@
                     }
                     const d = state.devices.find(x => x.id === id);
                     if (!d) return;
-                    if (confirm(`❌ Hapus perangkat "${d.name}"?\nSemua data durasi akan hilang.`)) {
+                    if (confirm(`❌ Hapus perangkat "${d.name}" (${d.deviceId})?\nSemua data akan hilang.`)) {
                         state.devices = state.devices.filter(x => x.id !== id);
-                        addLog(`🗑️ Perangkat "${d.name}" dihapus`, 'danger');
+                        if (state.focusDeviceId === id) {
+                            state.focusDeviceId = state.devices[0]?.id || null;
+                        }
+                        addLog(`🗑️ Perangkat "${d.name}" (${d.deviceId}) dihapus`, 'danger');
                         showToast(`🗑️ ${d.name} dihapus`, 'danger');
                         renderAll();
                     }
@@ -924,103 +1237,238 @@
             full.innerHTML = fullItems;
         }
 
-        function renderMode() {
-            const isManual = state.mode === 'manual';
-            const manualBtn = document.getElementById('modeManual');
-            const autoBtn = document.getElementById('modeAuto');
-
-            manualBtn.className = isManual ? 'active-manual' : '';
-            autoBtn.className = !isManual ? 'active-auto' : '';
-
-            // Reset style if not active
-            if (!isManual) {
-                manualBtn.style.background = '#f3f4f6';
-                manualBtn.style.color = '#9ca3af';
-                manualBtn.style.boxShadow = 'none';
-                manualBtn.style.borderColor = 'transparent';
-            } else {
-                manualBtn.style.background = '#1e40af';
-                manualBtn.style.color = 'white';
-                manualBtn.style.boxShadow = '0 2px 8px rgba(30,64,175,0.3)';
-                manualBtn.style.borderColor = '#1e40af';
-            }
-
-            if (isManual) {
-                autoBtn.style.background = '#f3f4f6';
-                autoBtn.style.color = '#9ca3af';
-                autoBtn.style.boxShadow = 'none';
-                autoBtn.style.borderColor = 'transparent';
-            } else {
-                autoBtn.style.background = '#16a34a';
-                autoBtn.style.color = 'white';
-                autoBtn.style.boxShadow = '0 2px 8px rgba(22,163,74,0.3)';
-                autoBtn.style.borderColor = '#16a34a';
-            }
-        }
-
         function renderAll() {
-            renderStatus();
+            renderFocus();
             renderSignal();
-            renderSchedule();
-            renderCost();
             renderDevices();
             renderDeviceManagement();
             renderLogs();
-            renderMode();
+            document.getElementById('defaultCostInput').value = state.defaultCost;
         }
 
         // ============================================================
-        // CONTROL FUNCTIONS - PERANGKAT BISA NYALA BERSAMAAN
+        // CONTROL FUNCTIONS
         // ============================================================
-        function controlPump(action) {
-            if (action === 'START') {
-                if (state.pumpStatus === 'RUNNING') { showToast('⚠️ Sudah menyala', 'warning'); return; }
-                state.pumpStatus = 'RUNNING';
-                if (state.timerSeconds === 0) state.timerSeconds = 1;
-                addLog('✅ Pompa dinyalakan', 'success');
-                showToast('🟢 Pompa ON', 'success');
-            } else if (action === 'STOP') {
-                if (state.pumpStatus === 'OFF') { showToast('⚠️ Sudah mati', 'warning'); return; }
-                state.pumpStatus = 'OFF';
-                // Simpan durasi ke SEMUA device yang ON
-                const runningDevices = state.devices.filter(d => d.status === 'ON');
-                if (runningDevices.length > 0) {
-                    runningDevices.forEach(dev => {
-                        dev.totalSeconds = (dev.totalSeconds || 0) + state.timerSeconds;
-                        dev.duration = formatTime(dev.totalSeconds);
-                    });
-                }
-                state.timerSeconds = 0;
-                addLog('🔴 Pompa dimatikan', 'danger');
-                showToast('🔴 Pompa OFF', 'danger');
+        function controlFocus(action) {
+            const device = getFocusDevice();
+            if (!device) return;
+
+            if (action === 'ON') {
+                if (device.status === 'ON') { showToast(`⚠️ ${device.name} sudah ON`, 'warning'); return; }
+                device.status = 'ON';
+                device.running = true;
+                if (device.totalSeconds === undefined) device.totalSeconds = 0;
+                device.duration = formatTime(device.totalSeconds || 0);
+                addLog(`✅ ${device.name} (${device.deviceId}) dinyalakan`, 'success');
+                showToast(`🟢 ${device.name} ON`, 'success');
+            } else if (action === 'OFF') {
+                if (device.status === 'OFF') { showToast(`⚠️ ${device.name} sudah OFF`, 'warning'); return; }
+                if (device.totalSeconds === undefined) device.totalSeconds = 0;
+                device.totalSeconds += state.timerSeconds;
+                device.status = 'OFF';
+                device.running = false;
+                device.duration = formatTime(device.totalSeconds || 0);
+                addLog(`🔴 ${device.name} (${device.deviceId}) dimatikan`, 'danger');
+                showToast(`🔴 ${device.name} OFF`, 'danger');
             }
             renderAll();
         }
 
-        function controlDevice(id, action) {
-            const d = state.devices.find(x => x.id === id);
-            if (!d) return;
+        function openDeviceDetail(deviceId) {
+            const device = state.devices.find(d => d.id === deviceId);
+            if (!device) return;
+
+            const cost = getDeviceCost(device);
+            const totalDurasi = device.totalSeconds > 0 ? secondsToHMS(device.totalSeconds) : 'Belum menyala';
+
+            openModal(`
+                        <h4 class="font-bold text-gray-800 text-sm mb-1">⚙️ ${device.name}</h4>
+                        <p class="text-xs text-gray-400 mb-3">${device.deviceId} | ${device.location || 'Ladang'} | Status: <span class="${getStatusColor(device.status)} font-semibold">${device.status}</span></p>
+
+                        <div class="bg-gray-50 rounded-xl p-3 space-y-2 mb-3">
+                            <div class="detail-row">
+                                <span class="text-gray-500">Device ID</span>
+                                <span class="font-mono font-semibold text-sm">${device.deviceId}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="text-gray-500">Pairing Code</span>
+                                <span class="pairing-code">${device.pairingCode}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="text-gray-500">Status Pairing</span>
+                                <span class="${device.isPaired ? 'text-green-600' : 'text-yellow-600'} font-semibold">${device.isPaired ? '✅ Terhubung' : '⏳ Menunggu'}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="text-gray-500">Mode</span>
+                                <div class="flex gap-2">
+                                    <button class="mode-device-btn text-xs px-3 py-1 rounded-lg ${device.mode === 'manual' ? 'active-manual' : 'bg-gray-200 text-gray-600'}" data-device="${device.id}" data-mode="manual">Manual</button>
+                                    <button class="mode-device-btn text-xs px-3 py-1 rounded-lg ${device.mode === 'auto' ? 'active-auto' : 'bg-gray-200 text-gray-600'}" data-device="${device.id}" data-mode="auto">Auto</button>
+                                </div>
+                            </div>
+
+                            <div class="detail-row ${device.mode === 'manual' ? 'opacity-40' : ''}">
+                                <span class="text-gray-500">Jadwal</span>
+                                <div class="flex items-center gap-1">
+                                    <input type="time" id="scheduleOnInput" value="${device.scheduleOn || '06:00'}" class="timer-input ${device.mode === 'manual' ? 'pointer-events-none' : ''}" />
+                                    <span class="text-xs text-gray-400">-</span>
+                                    <input type="time" id="scheduleOffInput" value="${device.scheduleOff || '18:00'}" class="timer-input ${device.mode === 'manual' ? 'pointer-events-none' : ''}" />
+                                    <button id="saveScheduleBtn" class="text-[10px] text-green-600 font-medium ml-1 ${device.mode === 'manual' ? 'opacity-40 pointer-events-none' : ''}">Simpan</button>
+                                </div>
+                            </div>
+
+                            <div class="detail-row">
+                                <span class="text-gray-500">Status</span>
+                                <span class="font-semibold ${getStatusColor(device.status)}">${device.status}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="text-gray-500">Running</span>
+                                <span class="font-semibold ${device.running ? 'text-green-600' : 'text-gray-400'}">${device.running ? '✅ RUN' : '⏸️ STOP'}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="text-gray-500">Overload</span>
+                                <span class="font-semibold ${device.overload ? 'text-red-600' : 'text-green-600'}">${device.overload ? '⚠️ OVERLOAD!' : '● Normal'}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="text-gray-500">Durasi Menyala</span>
+                                <span class="font-semibold text-gray-700">${totalDurasi}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="text-gray-500">Biaya per Jam</span>
+                                <input id="deviceCostInput" type="number" value="${device.costPerHour || state.defaultCost}" class="w-24 p-1 border border-gray-200 rounded-lg text-sm text-right" />
+                                <span class="text-xs text-gray-400">Rp</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="text-gray-500">Total Biaya</span>
+                                <span class="font-semibold text-amber-600">Rp ${Math.round(cost).toLocaleString()}</span>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-2 mb-2">
+                            <button class="btn-farm bg-green-600 text-white text-xs flex-1" onclick="controlDeviceFromModal(${device.id},'ON')">
+                                <i class="fas fa-play"></i> ON
+                            </button>
+                            <button class="btn-farm bg-red-500 text-white text-xs flex-1" onclick="controlDeviceFromModal(${device.id},'OFF')">
+                                <i class="fas fa-stop"></i> OFF
+                            </button>
+                        </div>
+                        <button class="btn-farm bg-gray-200 text-gray-700 text-xs" onclick="closeModal(); renderAll();">Tutup</button>
+                    `);
+
+            // Mode device
+            document.querySelectorAll('.mode-device-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.dataset.device);
+                    const mode = this.dataset.mode;
+                    const dev = state.devices.find(d => d.id === id);
+                    if (dev) {
+                        dev.mode = mode;
+                        document.querySelectorAll('.mode-device-btn').forEach(b => {
+                            const m = b.dataset.mode;
+                            if (m === mode) {
+                                b.className =
+                                    `mode-device-btn text-xs px-3 py-1 rounded-lg ${mode === 'manual' ? 'active-manual' : 'active-auto'}`;
+                            } else {
+                                b.className =
+                                    'mode-device-btn text-xs px-3 py-1 rounded-lg bg-gray-200 text-gray-600';
+                            }
+                        });
+                        const row = btn.closest('.detail-row');
+                        const inputs = row.parentElement.querySelectorAll('.timer-input');
+                        const saveBtn = row.parentElement.querySelector('#saveScheduleBtn');
+                        if (mode === 'manual') {
+                            inputs.forEach(inp => { inp.classList.add('pointer-events-none');
+                                inp.style.opacity = '0.5'; });
+                            if (saveBtn) { saveBtn.classList.add('pointer-events-none', 'opacity-40'); }
+                        } else {
+                            inputs.forEach(inp => { inp.classList.remove('pointer-events-none');
+                                inp.style.opacity = '1'; });
+                            if (saveBtn) { saveBtn.classList.remove('pointer-events-none', 'opacity-40'); }
+                            const on = document.getElementById('scheduleOnInput').value;
+                            const off = document.getElementById('scheduleOffInput').value;
+                            if (on && off && on < off) {
+                                dev.scheduleOn = on;
+                                dev.scheduleOff = off;
+                                checkAllSchedules();
+                            }
+                        }
+                        addLog(`🔄 ${dev.name} mode: ${mode === 'manual' ? 'Manual' : 'Auto'}`, 'info');
+                        showToast(`🔄 Mode ${mode === 'manual' ? 'Manual' : 'Auto'} untuk ${dev.name}`, 'info');
+                        renderAll();
+                    }
+                });
+            });
+
+            // Save schedule
+            document.getElementById('saveScheduleBtn')?.addEventListener('click', function() {
+                const on = document.getElementById('scheduleOnInput').value;
+                const off = document.getElementById('scheduleOffInput').value;
+                if (on >= off) {
+                    showToast('⚠️ ON harus sebelum OFF!', 'danger');
+                    return;
+                }
+                const dev = state.devices.find(d => d.id === device.id);
+                if (dev) {
+                    dev.scheduleOn = on;
+                    dev.scheduleOff = off;
+                    addLog(`⏱️ Jadwal ${dev.name}: ${on}-${off}`, 'success');
+                    showToast(`✅ Jadwal ${dev.name}: ${on}-${off}`, 'success');
+                    checkAllSchedules();
+                    renderAll();
+                }
+            });
+
+            // Biaya
+            document.getElementById('deviceCostInput')?.addEventListener('change', function() {
+                const val = parseInt(this.value) || state.defaultCost;
+                const dev = state.devices.find(d => d.id === device.id);
+                if (dev) {
+                    dev.costPerHour = val;
+                    addLog(`💰 Biaya ${dev.name}: Rp${val}/jam`, 'info');
+                    renderAll();
+                }
+            });
+        }
+
+        function controlDeviceFromModal(id, action) {
+            const device = state.devices.find(d => d.id === id);
+            if (!device) return;
+
+            const costInput = document.getElementById('deviceCostInput');
+            if (costInput) {
+                device.costPerHour = parseInt(costInput.value) || state.defaultCost;
+            }
+
+            const onInput = document.getElementById('scheduleOnInput');
+            const offInput = document.getElementById('scheduleOffInput');
+            if (onInput && offInput && device.mode === 'auto') {
+                const on = onInput.value;
+                const off = offInput.value;
+                if (on && off && on < off) {
+                    device.scheduleOn = on;
+                    device.scheduleOff = off;
+                }
+            }
 
             if (action === 'ON') {
-                if (d.status === 'ON') { showToast(`⚠️ ${d.name} sudah ON`, 'warning'); return; }
-                d.status = 'ON';
-                if (d.totalSeconds === undefined) d.totalSeconds = 0;
-                d.duration = formatTime(d.totalSeconds || 0);
-                addLog(`✅ ${d.name} dinyalakan`, 'success');
-                showToast(`🟢 ${d.name} ON`, 'success');
+                if (device.status === 'ON') { showToast(`⚠️ ${device.name} sudah ON`, 'warning'); return; }
+                device.status = 'ON';
+                device.running = true;
+                if (device.totalSeconds === undefined) device.totalSeconds = 0;
+                device.duration = formatTime(device.totalSeconds || 0);
+                addLog(`✅ ${device.name} (${device.deviceId}) dinyalakan`, 'success');
+                showToast(`🟢 ${device.name} ON`, 'success');
             } else {
-                if (d.status === 'OFF') { showToast(`⚠️ ${d.name} sudah OFF`, 'warning'); return; }
-                // Simpan durasi sebelum mati
-                if (d.totalSeconds === undefined) d.totalSeconds = 0;
-                // Tambahkan timer saat ini ke total
-                if (d.status === 'ON') {
-                    d.totalSeconds += state.timerSeconds;
-                }
-                d.status = 'OFF';
-                d.duration = formatTime(d.totalSeconds || 0);
-                addLog(`🔴 ${d.name} dimatikan`, 'danger');
-                showToast(`🔴 ${d.name} OFF`, 'danger');
+                if (device.status === 'OFF') { showToast(`⚠️ ${device.name} sudah OFF`, 'warning'); return; }
+                if (device.totalSeconds === undefined) device.totalSeconds = 0;
+                device.totalSeconds += state.timerSeconds;
+                device.status = 'OFF';
+                device.running = false;
+                device.duration = formatTime(device.totalSeconds || 0);
+                addLog(`🔴 ${device.name} (${device.deviceId}) dimatikan`, 'danger');
+                showToast(`🔴 ${device.name} OFF`, 'danger');
             }
+
+            state.focusDeviceId = id;
             renderAll();
             closeModal();
         }
@@ -1056,19 +1504,23 @@
         // ============================================================
         function startTimer() {
             if (state.timerInterval) clearInterval(state.timerInterval);
-            state.timerInterval = setInterval(() => {
-                if (state.pumpStatus === 'RUNNING') {
-                    state.timerSeconds++;
 
-                    // Update SEMUA device yang ON (bisa nyala bersamaan)
-                    const runningDevices = state.devices.filter(d => d.status === 'ON');
+            state.timerInterval = setInterval(() => {
+                const now = new Date();
+
+                if (state.lastScheduleCheck === 0 || Math.abs(now.getTime() - state.lastScheduleCheck) > 30000) {
+                    state.lastScheduleCheck = now.getTime();
+                    checkAllSchedules();
+                }
+
+                const runningDevices = state.devices.filter(d => d.status === 'ON');
+                if (runningDevices.length > 0) {
+                    state.timerSeconds++;
                     runningDevices.forEach(dev => {
                         dev.totalSeconds = (dev.totalSeconds || 0) + 1;
                         dev.duration = formatTime(dev.totalSeconds);
                     });
-
-                    renderStatus();
-                    renderCost();
+                    renderFocus();
                     renderDevices();
                     renderDeviceManagement();
                 }
@@ -1085,98 +1537,124 @@
         }
 
         // ============================================================
-        // EVENT LISTENERS
+        // ADD DEVICE - UNIK & TERINTEGRASI
         // ============================================================
+        function openAddDeviceModal() {
+            const newPairingCode = generatePairingCode();
+            const newDeviceId = generateDeviceId();
 
-        // Mode - DENGAN WARNA PEMBEDA JELAS
-        document.getElementById('modeManual').addEventListener('click', function() {
-            state.mode = 'manual';
-            renderMode();
-            showToast('🔧 Mode Manual (Biru)', 'info');
-        });
-        document.getElementById('modeAuto').addEventListener('click', function() {
-            state.mode = 'auto';
-            renderMode();
-            showToast('⏱️ Mode Auto (Hijau)', 'info');
-            addLog('⏱️ Mode Auto diaktifkan', 'info');
-        });
-
-        // Control
-        document.getElementById('btnStart').addEventListener('click', () => controlPump('START'));
-        document.getElementById('btnStop').addEventListener('click', () => controlPump('STOP'));
-
-        // Edit schedule
-        document.getElementById('editScheduleBtn').addEventListener('click', function() {
-            navigateTo('pageTimer');
-            showToast('⏱️ Atur timer', 'info');
-        });
-
-        // Edit cost
-        document.getElementById('editCostBtn').addEventListener('click', function() {
-            navigateTo('pageTimer');
-            showToast('💰 Atur biaya per jam', 'info');
-        });
-
-        // Save timer
-        document.getElementById('saveTimerBtn').addEventListener('click', function() {
-            const on = document.getElementById('timerOnInput').value;
-            const off = document.getElementById('timerOffInput').value;
-            const cost = parseInt(document.getElementById('costPerHourInput').value) || 5000;
-
-            if (on >= off) { showToast('⚠️ ON harus sebelum OFF!', 'danger'); return; }
-
-            state.scheduleOn = on;
-            state.scheduleOff = off;
-            state.costPerHour = cost;
-            addLog(`⏱️ Timer: ${on}-${off}, Biaya: Rp${cost}/jam`, 'success');
-            showToast('✅ Timer disimpan!', 'success');
-            renderAll();
-            navigateTo('pageHome');
-        });
-
-        // Reset timer
-        document.getElementById('resetTimerBtn').addEventListener('click', function() {
-            state.scheduleOn = '06:00';
-            state.scheduleOff = '18:00';
-            state.costPerHour = 5000;
-            addLog('🔄 Timer direset', 'warning');
-            showToast('🔄 Timer direset', 'warning');
-            renderAll();
-        });
-
-        // Add device
-        document.getElementById('addDeviceBtn').addEventListener('click', function() {
             openModal(`
-                        <h4 class="font-bold text-gray-800 text-sm mb-2">📷 Tambah Perangkat</h4>
-                        <p class="text-xs text-gray-400 mb-3">Scan QR Code atau isi manual</p>
-                        <input id="newDeviceName" type="text" placeholder="Nama perangkat" class="w-full p-2 border border-gray-200 rounded-xl text-sm mb-2" />
-                        <button id="confirmAddDevice" class="btn-farm bg-green-600 text-white text-sm">
-                            <i class="fas fa-plus"></i> Tambah
-                        </button>
-                        <button class="btn-farm bg-gray-200 text-gray-700 text-sm mt-1.5" onclick="closeModal()">Batal</button>
+                        <h4 class="font-bold text-gray-800 text-sm mb-1">🔗 Pairing Perangkat Baru</h4>
+                        <p class="text-xs text-gray-400 mb-3">Scan QR Code atau masukkan kode pairing manual</p>
+
+                        <!-- QR Code Simulasi -->
+                        <div class="qr-placeholder mb-3">
+                            <div class="qr-pattern">
+                                ${Array(100).fill(0).map((_, i) => {
+                                    const row = Math.floor(i / 10);
+                                    const col = i % 10;
+                                    const isCorner = (row < 3 && col < 3) || (row < 3 && col > 6) || (row > 6 && col < 3);
+                                    const isFilled = isCorner || Math.random() > 0.4;
+                                    return `<div class="dot ${!isFilled ? 'empty' : ''} ${isCorner ? 'corner' : ''}"></div>`;
+                                }).join('')}
+                            </div>
+                            <div class="scan-overlay"></div>
+                        </div>
+
+                        <div class="text-center mb-3">
+                            <p class="text-xs text-gray-500">Kode Pairing</p>
+                            <div class="pairing-code">${newPairingCode}</div>
+                            <p class="text-[8px] text-gray-400 mt-1">Masukkan kode ini di panel kontrol fisik</p>
+                        </div>
+
+                        <div class="space-y-2">
+                            <input id="newDeviceName" type="text" placeholder="Nama perangkat (contoh: Sawah Baru)" class="w-full p-2 border border-gray-200 rounded-xl text-sm" />
+                            <input id="newDeviceLocation" type="text" placeholder="Lokasi (contoh: Ladang 3)" class="w-full p-2 border border-gray-200 rounded-xl text-sm" />
+                            <div class="flex gap-4">
+                                <label class="text-xs font-medium text-gray-600 flex items-center gap-2">
+                                    <input type="radio" name="newDeviceMode" value="manual" checked /> Manual
+                                </label>
+                                <label class="text-xs font-medium text-gray-600 flex items-center gap-2">
+                                    <input type="radio" name="newDeviceMode" value="auto" /> Auto
+                                </label>
+                            </div>
+                            <div class="flex gap-2 items-center text-xs text-gray-600">
+                                <span>Jadwal:</span>
+                                <input type="time" id="newScheduleOn" value="06:00" class="timer-input" />
+                                <span>-</span>
+                                <input type="time" id="newScheduleOff" value="18:00" class="timer-input" />
+                            </div>
+                        </div>
+
+                        <div class="flex gap-2 mt-3">
+                            <button id="confirmAddDevice" class="btn-farm bg-green-600 text-white text-sm flex-1">
+                                <i class="fas fa-link"></i> Pair & Tambah
+                            </button>
+                            <button class="btn-farm bg-gray-200 text-gray-700 text-sm flex-1" onclick="closeModal()">Batal</button>
+                        </div>
+                        <p class="text-[8px] text-gray-400 text-center mt-2">*Device akan otomatis terintegrasi setelah pairing</p>
                     `);
 
             document.getElementById('confirmAddDevice').addEventListener('click', function() {
                 const name = document.getElementById('newDeviceName').value.trim() || `Device ${state.deviceCounter}`;
-                state.devices.push({
+                const location = document.getElementById('newDeviceLocation').value.trim() || 'Ladang';
+                const modeRadio = document.querySelector('input[name="newDeviceMode"]:checked');
+                const mode = modeRadio ? modeRadio.value : 'manual';
+                const scheduleOn = document.getElementById('newScheduleOn').value || '06:00';
+                const scheduleOff = document.getElementById('newScheduleOff').value || '18:00';
+
+                const newDevice = {
                     id: state.deviceCounter++,
                     name: name,
                     status: 'OFF',
                     duration: '--:--:--',
-                    totalSeconds: 0
-                });
-                addLog(`📱 Perangkat ditambahkan: ${name}`, 'success');
-                showToast(`✅ ${name} ditambahkan`, 'success');
+                    totalSeconds: 0,
+                    mode: mode,
+                    costPerHour: state.defaultCost,
+                    running: false,
+                    overload: false,
+                    scheduleOn: mode === 'auto' ? scheduleOn : null,
+                    scheduleOff: mode === 'auto' ? scheduleOff : null,
+                    deviceId: newDeviceId,
+                    pairingCode: newPairingCode,
+                    isPaired: true,
+                    location: location
+                };
+
+                state.devices.push(newDevice);
+                state.focusDeviceId = newDevice.id;
+
+                if (mode === 'auto') {
+                    checkAllSchedules();
+                }
+
+                addLog(`🔗 Device baru dipair: ${name} (${newDeviceId})`, 'success');
+                showToast(`✅ ${name} berhasil dipair!`, 'success');
                 renderAll();
                 closeModal();
             });
+        }
+
+        // ============================================================
+        // EVENT LISTENERS
+        // ============================================================
+
+        document.getElementById('focusBtnOn').addEventListener('click', () => controlFocus('ON'));
+        document.getElementById('focusBtnOff').addEventListener('click', () => controlFocus('OFF'));
+
+        document.getElementById('focusCard').addEventListener('click', function(e) {
+            if (e.target.closest('button')) return;
+            const device = getFocusDevice();
+            if (device) {
+                openDeviceDetail(device.id);
+            }
         });
 
-        document.getElementById('addDeviceMgmtBtn').addEventListener('click', function() {
-            document.getElementById('addDeviceBtn').click();
-        });
+        // Add device - menggunakan sistem pairing unik
+        document.getElementById('addDeviceBtn').addEventListener('click', openAddDeviceModal);
+        document.getElementById('addDeviceMgmtBtn').addEventListener('click', openAddDeviceModal);
 
-        // Clear logs - BERFUNGSI
+        // Clear logs
         document.getElementById('clearLogBtn').addEventListener('click', function() {
             if (state.logs.length === 0) { showToast('📭 Kosong', 'info'); return; }
             if (confirm('🗑️ Hapus semua riwayat?')) {
@@ -1201,21 +1679,35 @@
             showToast(state.settings.autoRetry ? '🔄 Auto-retry aktif' : '🔄 Auto-retry nonaktif', 'info');
         });
 
+        document.getElementById('defaultCostInput').addEventListener('change', function() {
+            state.defaultCost = parseInt(this.value) || 5000;
+            addLog(`💰 Biaya default: Rp${state.defaultCost}/jam`, 'info');
+            showToast(`💰 Biaya default: Rp${state.defaultCost}/jam`, 'info');
+            renderAll();
+        });
+
         // Reset all
         document.getElementById('resetAllBtn').addEventListener('click', function() {
             if (!confirm('Reset semua pengaturan?')) return;
             state.settings = { notifications: true, autoRetry: true };
             document.getElementById('toggleNotif').classList.add('active');
             document.getElementById('toggleRetry').classList.add('active');
-            state.scheduleOn = '06:00';
-            state.scheduleOff = '18:00';
-            state.costPerHour = 5000;
-            state.pumpStatus = 'OFF';
+            state.defaultCost = 5000;
             state.timerSeconds = 0;
             state.logs = [];
-            state.devices.forEach(d => { d.totalSeconds = 0;
+            state.devices.forEach(d => {
+                d.totalSeconds = 0;
                 d.duration = '--:--:--';
-                d.status = 'OFF'; });
+                d.status = 'OFF';
+                d.running = false;
+                d.overload = false;
+                d.mode = 'manual';
+                d.costPerHour = state.defaultCost;
+                d.scheduleOn = '06:00';
+                d.scheduleOff = '18:00';
+                d.isPaired = true;
+            });
+            state.focusDeviceId = state.devices[0]?.id || 1;
             addLog('🔄 Sistem direset', 'warning');
             showToast('🔄 Reset selesai', 'warning');
             renderAll();
@@ -1241,9 +1733,9 @@
         document.getElementById('menuBtn').addEventListener('click', function() {
             openModal(`
                         <h4 class="font-bold text-gray-800 text-sm mb-2">📋 Menu</h4>
-                        ${['Home','Timer','Device','Log','Settings'].map(p =>
+                        ${['Home','Device','Log','Settings'].map(p =>
                             `<button class="w-full text-left px-3 py-2 rounded-xl bg-gray-50 hover:bg-gray-100 text-sm mb-1" onclick="closeModal(); navigateTo('page${p}')">
-                                ${p === 'Home' ? '🏠' : p === 'Timer' ? '⏱️' : p === 'Device' ? '📦' : p === 'Log' ? '📋' : '⚙️'} ${p}
+                                ${p === 'Home' ? '🏠' : p === 'Device' ? '📦' : p === 'Log' ? '📋' : '⚙️'} ${p}
                             </button>`
                         ).join('')}
                         <button class="btn-farm bg-gray-200 text-gray-700 text-sm mt-1" onclick="closeModal()">Tutup</button>
@@ -1254,33 +1746,46 @@
         // KEYBOARD SHORTCUTS
         // ============================================================
         document.addEventListener('keydown', (e) => {
-            if (e.key === '1') controlPump('START');
-            if (e.key === '2') controlPump('STOP');
+            if (e.key === '1') controlFocus('ON');
+            if (e.key === '2') controlFocus('OFF');
             if (e.key === 'h') navigateTo('pageHome');
-            if (e.key === 't') navigateTo('pageTimer');
             if (e.key === 'd') navigateTo('pageDevice');
             if (e.key === 'l') navigateTo('pageLog');
             if (e.key === 's') navigateTo('pageSettings');
             if (e.key === 'Escape') closeModal();
+            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                e.preventDefault();
+                const currentIdx = state.devices.findIndex(d => d.id === state.focusDeviceId);
+                const newIdx = e.key === 'ArrowUp' ?
+                    Math.max(0, currentIdx - 1) :
+                    Math.min(state.devices.length - 1, currentIdx + 1);
+                if (state.devices[newIdx]) {
+                    state.focusDeviceId = state.devices[newIdx].id;
+                    renderAll();
+                    showToast(`📱 Fokus: ${state.devices[newIdx].name} (${state.devices[newIdx].deviceId})`, 'info');
+                }
+            }
         });
 
         // ============================================================
         // INIT
         // ============================================================
         function init() {
-            addLog('🌾 Smart Pump siap', 'success');
+            addLog('🌾 Re-Tech AgroPump siap', 'success');
             addLog('📡 Sinyal terdeteksi', 'info');
-            addLog('✅ Sistem normal', 'success');
+            addLog('✅ ${state.devices.length} perangkat terhubung', 'success');
 
-            if (state.devices.length > 0) {
-                document.getElementById('deviceNameLabel').textContent = state.devices[0].name;
-            }
+            setTimeout(() => {
+                checkAllSchedules();
+                renderAll();
+            }, 500);
 
             renderAll();
             startTimer();
             startSignal();
-            console.log('🌾 Smart Pump loaded!');
-            console.log('Shortcuts: 1=ON, 2=OFF, h=Home, t=Timer, d=Device, l=Log, s=Settings');
+            console.log('🌾 Re-Tech AgroPump loaded!');
+            console.log('📱 Device pairing system active');
+            console.log('Shortcuts: 1=ON, 2=OFF, ↑↓=Switch Device');
         }
 
         init();
