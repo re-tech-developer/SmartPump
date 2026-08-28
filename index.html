@@ -31,7 +31,6 @@
             background: linear-gradient(180deg, #f0f6f0 0%, #e8f0e8 100%);
         }
 
-        /* PREMIUM HEADER */
         .header-premium {
             background: linear-gradient(135deg, #0a2e0f 0%, #1a4d2a 50%, #0d3b1a 100%);
             padding: 12px 16px 10px;
@@ -115,6 +114,7 @@
             font-size: 0.9rem;
             backdrop-filter: blur(4px);
             border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
         }
         .header-premium .header-actions button:hover {
             background: rgba(255, 255, 255, 0.15);
@@ -128,10 +128,10 @@
         }
         .header-premium .header-actions .badge-dot {
             position: absolute;
-            top: -2px;
-            right: -2px;
-            width: 16px;
-            height: 16px;
+            top: -4px;
+            right: -4px;
+            min-width: 18px;
+            height: 18px;
             background: #ef4444;
             border-radius: 50%;
             font-size: 0.45rem;
@@ -141,6 +141,13 @@
             align-items: center;
             justify-content: center;
             border: 2px solid #0a2e0f;
+            padding: 0 4px;
+            transition: all 0.3s ease;
+        }
+        .header-premium .header-actions .badge-dot.hidden {
+            opacity: 0;
+            transform: scale(0.5);
+            pointer-events: none;
         }
 
         .card {
@@ -365,6 +372,7 @@
             transform: translateX(-50%) translateY(0);
         }
 
+        /* MODAL - TANPA SCROLL */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -374,7 +382,7 @@
             display: none;
             align-items: center;
             justify-content: center;
-            padding: 16px;
+            padding: 12px;
         }
         .modal-overlay.open {
             display: flex;
@@ -382,12 +390,14 @@
         .modal-box {
             background: white;
             border-radius: 18px;
-            max-width: 380px;
+            max-width: 400px;
             width: 100%;
-            padding: 18px;
+            padding: 14px 16px;
             animation: modalPop 0.2s ease;
-            max-height: 92vh;
-            overflow-y: auto;
+            max-height: 96vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
         @keyframes modalPop {
             from {
@@ -398,6 +408,26 @@
                 opacity: 1;
                 transform: scale(1);
             }
+        }
+
+        /* Konten modal - compact tanpa scroll */
+        .modal-content-scroll {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .modal-content-scroll .modal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 2px;
+        }
+        .modal-content-scroll .modal-body::-webkit-scrollbar {
+            width: 2px;
+        }
+        .modal-content-scroll .modal-body::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 4px;
         }
 
         .log-item {
@@ -427,10 +457,12 @@
         .detail-row {
             display: flex;
             justify-content: space-between;
-            padding: 4px 0;
+            padding: 3px 0;
             border-bottom: 1px solid #f3f4f6;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             align-items: center;
+            gap: 4px;
+            min-height: 28px;
         }
         .detail-row:last-child {
             border-bottom: none;
@@ -525,26 +557,49 @@
             background: #16a34a !important;
             color: white !important;
         }
+        .mode-device-btn {
+            font-size: 0.6rem !important;
+            padding: 3px 12px !important;
+            border-radius: 8px !important;
+        }
 
+        /* TIMER INPUT - DIPERBAIKI TIDAK TERPOTONG */
+        .timer-input-wrap {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
         .timer-input {
-            width: 60px;
-            padding: 2px 4px;
-            border: 1px solid #e5e7eb;
-            border-radius: 6px;
-            font-size: 0.7rem;
+            width: 80px;
+            padding: 3px 6px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 0.75rem;
             text-align: center;
-            background: #f9fafb;
+            background: white;
+            font-weight: 600;
+            color: #1f2937;
         }
         .timer-input:focus {
             outline: 2px solid #2e7d32;
             outline-offset: 1px;
         }
+        .timer-input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #f3f4f6;
+        }
+        .timer-separator {
+            font-size: 0.8rem;
+            color: #9ca3af;
+            font-weight: 700;
+        }
 
         .btn-on-off {
-            padding: 6px 16px;
+            padding: 5px 16px;
             border-radius: 10px;
             font-weight: 700;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             border: none;
             cursor: pointer;
             transition: all 0.15s;
@@ -566,10 +621,9 @@
             color: white;
         }
 
-        /* QR Code styling */
         .qr-placeholder {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             background: white;
             border: 2px dashed #d1d5db;
             border-radius: 12px;
@@ -583,8 +637,8 @@
             display: grid;
             grid-template-columns: repeat(10, 1fr);
             gap: 2px;
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
         }
         .qr-placeholder .qr-pattern .dot {
             width: 100%;
@@ -616,17 +670,136 @@
             }
         }
 
-        /* Pairing code styling */
         .pairing-code {
             font-family: monospace;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: 800;
             letter-spacing: 4px;
             color: #0a2e0f;
             background: #f3f6f3;
-            padding: 8px 16px;
-            border-radius: 10px;
+            padding: 4px 14px;
+            border-radius: 8px;
             display: inline-block;
+        }
+
+        .notif-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 6px 10px;
+            border-radius: 10px;
+            border-bottom: 1px solid #f3f4f6;
+            transition: background 0.15s;
+        }
+        .notif-item:last-child {
+            border-bottom: none;
+        }
+        .notif-item:hover {
+            background: #f9fafb;
+        }
+        .notif-item .notif-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            flex-shrink: 0;
+        }
+        .notif-item .notif-icon.success {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .notif-item .notif-icon.warning {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        .notif-item .notif-icon.danger {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .notif-item .notif-icon.info {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+        .notif-item .notif-text {
+            flex: 1;
+            font-size: 0.7rem;
+            color: #1f2937;
+        }
+        .notif-item .notif-time {
+            font-size: 0.5rem;
+            color: #9ca3af;
+            white-space: nowrap;
+        }
+        .notif-item .notif-dismiss {
+            background: none;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            font-size: 0.6rem;
+            padding: 0 4px;
+            transition: color 0.2s;
+        }
+        .notif-item .notif-dismiss:hover {
+            color: #ef4444;
+        }
+
+        .btn-save-all {
+            background: linear-gradient(135deg, #0a2e0f, #1a4d2a);
+            color: white;
+            font-weight: 700;
+            padding: 8px 0;
+            border-radius: 10px;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 2px 12px rgba(10, 46, 15, 0.25);
+            margin-top: 2px;
+        }
+        .btn-save-all:active {
+            transform: scale(0.97);
+        }
+        .btn-save-all i {
+            color: #fbbf24;
+        }
+
+        /* Compact modal */
+        .modal-compact .detail-row {
+            padding: 2px 0;
+            min-height: 24px;
+            font-size: 0.65rem;
+        }
+        .modal-compact .pairing-code {
+            font-size: 1rem;
+            padding: 2px 12px;
+        }
+        .modal-compact .timer-input {
+            width: 72px;
+            font-size: 0.7rem;
+            padding: 2px 4px;
+        }
+        .modal-compact .btn-on-off {
+            padding: 4px 12px;
+            font-size: 0.65rem;
+        }
+        .modal-compact .btn-save-all {
+            padding: 6px 0;
+            font-size: 0.65rem;
+        }
+        .modal-compact .btn-farm {
+            padding: 5px 0;
+            font-size: 0.65rem;
+        }
+        .modal-compact .modal-body {
+            padding-right: 0;
         }
     </style>
 </head>
@@ -654,7 +827,7 @@
                     <button id="notifBtn" class="text-sm">
                         <i class="fas fa-bell"></i>
                     </button>
-                    <span class="badge-dot" id="notifBadge">3</span>
+                    <span id="notifBadge" class="badge-dot">3</span>
                 </div>
                 <button id="menuBtn" class="text-sm">
                     <i class="fas fa-bars"></i>
@@ -735,7 +908,7 @@
             </div>
 
             <!-- History Log -->
-            <div class="card p-1.5 flex-shrink-0 mt-1 log-container-home" style="height:110px; min-height:0;">
+            <div class="card p-1.5 flex-shrink-0 mt-1 log-container-home" style="height:100px; min-height:0;">
                 <div class="flex items-center justify-between flex-shrink-0">
                     <span class="text-[10px] font-bold text-gray-700">
                         <i class="fas fa-history text-gray-500 mr-1"></i> Riwayat
@@ -844,7 +1017,7 @@
 
     <!-- ===== MODAL ===== -->
     <div id="modalOverlay" class="modal-overlay">
-        <div class="modal-box" id="modalContent">
+        <div class="modal-box modal-compact" id="modalContent">
             <!-- Rendered by JS -->
         </div>
     </div>
@@ -909,14 +1082,154 @@
                 location: 'Kebun 3'
             }, ],
             logs: [],
-            notifications: ['✅ Pompa menyala 06:00', '⚠️ Sinyal lemah', '✅ Timer disimpan'],
+            notifications: [],
             settings: { notifications: true, autoRetry: true },
             deviceCounter: 4,
             timerInterval: null,
             signalInterval: null,
             currentPage: 'pageHome',
             lastScheduleCheck: 0,
+            notifCounter: 0,
         };
+
+        // ============================================================
+        // NOTIFICATION SYSTEM
+        // ============================================================
+        const notifMessages = [
+            { icon: 'fa-check-circle', color: 'success', text: 'Pompa menyala otomatis 06:00' },
+            { icon: 'fa-exclamation-triangle', color: 'warning', text: '⚠️ Sinyal GSM lemah di area sawah' },
+            { icon: 'fa-check-circle', color: 'success', text: '✅ Timer berhasil disimpan' },
+            { icon: 'fa-bolt', color: 'warning', text: '⚡ Tegangan listrik tidak stabil' },
+            { icon: 'fa-check-circle', color: 'success', text: '✅ Perangkat baru berhasil dipair' },
+            { icon: 'fa-exclamation-triangle', color: 'danger', text: '⚠️ Overload terdeteksi pada Sawah Utara' },
+            { icon: 'fa-check-circle', color: 'success', text: '✅ Jadwal berhasil diupdate' },
+            { icon: 'fa-leaf', color: 'info', text: '🌾 Siklus irigasi selesai' },
+            { icon: 'fa-clock', color: 'warning', text: '⏰ Jadwal akan dimulai dalam 5 menit' },
+            { icon: 'fa-check-circle', color: 'success', text: '✅ Mode Auto diaktifkan untuk Kebun Mangga' },
+            { icon: 'fa-exclamation-triangle', color: 'warning', text: '📡 Koneksi terputus, mode offline aktif' },
+            { icon: 'fa-check-circle', color: 'success', text: '✅ Pompa Sawah Selatan dinyalakan manual' },
+            { icon: 'fa-bolt', color: 'danger', text: '⚡ Gangguan daya terdeteksi' },
+            { icon: 'fa-check-circle', color: 'success', text: '✅ Semua perangkat dalam kondisi normal' },
+            { icon: 'fa-leaf', color: 'info', text: '🌾 Irigasi harian selesai, total 3.5 jam' },
+        ];
+
+        function generateRandomNotification() {
+            const msg = notifMessages[Math.floor(Math.random() * notifMessages.length)];
+            const now = new Date();
+            const time = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            const notif = {
+                ...msg,
+                time: time,
+                id: Date.now() + Math.random(),
+                read: false
+            };
+            state.notifications.unshift(notif);
+            if (state.notifications.length > 20) {
+                state.notifications = state.notifications.slice(0, 20);
+            }
+            updateBadge();
+            return notif;
+        }
+
+        function updateBadge() {
+            const unread = state.notifications.filter(n => !n.read).length;
+            const badge = document.getElementById('notifBadge');
+            if (unread === 0) {
+                badge.classList.add('hidden');
+                badge.textContent = '0';
+            } else {
+                badge.classList.remove('hidden');
+                badge.textContent = unread > 9 ? '9+' : unread;
+            }
+        }
+
+        function markAllAsRead() {
+            state.notifications.forEach(n => n.read = true);
+            updateBadge();
+        }
+
+        function markAsRead(id) {
+            const notif = state.notifications.find(n => n.id === id);
+            if (notif) {
+                notif.read = true;
+                updateBadge();
+            }
+        }
+
+        function dismissNotification(id) {
+            state.notifications = state.notifications.filter(n => n.id !== id);
+            updateBadge();
+            const modalContent = document.getElementById('modalContent');
+            if (modalContent.innerHTML.includes('🔔 Notifikasi')) {
+                renderNotificationModal();
+            }
+        }
+
+        function renderNotificationModal() {
+            const unread = state.notifications.filter(n => !n.read).length;
+            const list = state.notifications.length > 0 ?
+                state.notifications.map(n =>
+                    `<div class="notif-item ${!n.read ? 'bg-green-50' : ''}">
+                                <div class="notif-icon ${n.color}">
+                                    <i class="fas ${n.icon}"></i>
+                                </div>
+                                <div class="notif-text">${n.text}</div>
+                                <div class="notif-time">${n.time}</div>
+                                ${!n.read ? `<button class="notif-dismiss" onclick="markAsRead(${n.id}); renderNotificationModal();"><i class="fas fa-check"></i></button>` : ''}
+                                <button class="notif-dismiss" onclick="dismissNotification(${n.id});"><i class="fas fa-times"></i></button>
+                            </div>`
+                ).join('') :
+                '<div class="text-center text-gray-400 py-6 text-sm">📭 Tidak ada notifikasi</div>';
+
+            const content = `
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="font-bold text-gray-800 text-sm">🔔 Notifikasi</h4>
+                            <div class="flex gap-2">
+                                ${state.notifications.filter(n => !n.read).length > 0 ? 
+                                    `<button class="text-[9px] text-green-600 font-medium hover:text-green-800" onclick="markAllAsRead(); renderNotificationModal();">Tandai semua</button>` : ''}
+                                ${state.notifications.length > 0 ? 
+                                    `<button class="text-[9px] text-red-400 font-medium hover:text-red-600" onclick="state.notifications=[]; updateBadge(); renderNotificationModal();">Hapus semua</button>` : ''}
+                            </div>
+                        </div>
+                        <div class="max-h-56 overflow-y-auto space-y-1">
+                            ${list}
+                        </div>
+                        <button class="btn-farm bg-gray-200 text-gray-700 text-sm mt-2" onclick="closeModal()">Tutup</button>
+                    `;
+            document.getElementById('modalContent').innerHTML = content;
+        }
+
+        // ============================================================
+        // TOAST
+        // ============================================================
+        let toastTimer = null;
+
+        function showToast(msg, type = 'info') {
+            const el = document.getElementById('toast');
+            const colors = { success: 'bg-green-600 text-white', danger: 'bg-red-600 text-white',
+                warning: 'bg-yellow-600 text-white', info: 'bg-blue-600 text-white' };
+            el.className = `toast-farm ${colors[type] || colors.info}`;
+            el.textContent = msg;
+            void el.offsetWidth;
+            el.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+        }
+
+        // ============================================================
+        // MODAL
+        // ============================================================
+        function openModal(html) {
+            document.getElementById('modalContent').innerHTML = html;
+            document.getElementById('modalOverlay').classList.add('open');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('open');
+        }
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
 
         // ============================================================
         // UTILITY
@@ -1008,6 +1321,7 @@
                     device.duration = formatTime(device.totalSeconds || 0);
                     addLog(`⏱️ ${device.name} otomatis ON (jadwal ${device.scheduleOn})`, 'success');
                     showToast(`🟢 ${device.name} ON otomatis`, 'success');
+                    generateRandomNotification();
                     renderAll();
                 } else if (!shouldBeOn && device.status === 'ON') {
                     if (device.totalSeconds === undefined) device.totalSeconds = 0;
@@ -1017,6 +1331,7 @@
                     device.duration = formatTime(device.totalSeconds || 0);
                     addLog(`⏱️ ${device.name} otomatis OFF (jadwal ${device.scheduleOff})`, 'info');
                     showToast(`🔴 ${device.name} OFF otomatis`, 'info');
+                    generateRandomNotification();
                     renderAll();
                 } else if (shouldBeOn && device.status === 'SCH') {
                     device.status = 'ON';
@@ -1024,42 +1339,11 @@
                     if (device.totalSeconds === undefined) device.totalSeconds = 0;
                     device.duration = formatTime(device.totalSeconds || 0);
                     addLog(`⏱️ ${device.name} otomatis ON (dari SCH)`, 'success');
+                    generateRandomNotification();
                     renderAll();
                 }
             });
         }
-
-        // ============================================================
-        // TOAST
-        // ============================================================
-        let toastTimer = null;
-
-        function showToast(msg, type = 'info') {
-            const el = document.getElementById('toast');
-            const colors = { success: 'bg-green-600 text-white', danger: 'bg-red-600 text-white',
-                warning: 'bg-yellow-600 text-white', info: 'bg-blue-600 text-white' };
-            el.className = `toast-farm ${colors[type] || colors.info}`;
-            el.textContent = msg;
-            void el.offsetWidth;
-            el.classList.add('show');
-            clearTimeout(toastTimer);
-            toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
-        }
-
-        // ============================================================
-        // MODAL
-        // ============================================================
-        function openModal(html) {
-            document.getElementById('modalContent').innerHTML = html;
-            document.getElementById('modalOverlay').classList.add('open');
-        }
-
-        function closeModal() {
-            document.getElementById('modalOverlay').classList.remove('open');
-        }
-        document.getElementById('modalOverlay').addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
-        });
 
         // ============================================================
         // RENDER
@@ -1204,6 +1488,7 @@
                         }
                         addLog(`🗑️ Perangkat "${d.name}" (${d.deviceId}) dihapus`, 'danger');
                         showToast(`🗑️ ${d.name} dihapus`, 'danger');
+                        generateRandomNotification();
                         renderAll();
                     }
                 });
@@ -1214,7 +1499,7 @@
             const container = document.getElementById('logContainer');
             const full = document.getElementById('logFullContainer');
 
-            const recentLogs = state.logs.slice(-8).reverse();
+            const recentLogs = state.logs.slice(-6).reverse();
 
             const items = recentLogs.map(l =>
                 `<div class="log-item">
@@ -1244,6 +1529,40 @@
             renderDeviceManagement();
             renderLogs();
             document.getElementById('defaultCostInput').value = state.defaultCost;
+            updateBadge();
+        }
+
+        // ============================================================
+        // SIMPAN SEMUA PENGATURAN
+        // ============================================================
+        function saveAllSettings() {
+            const deviceId = document.getElementById('currentDeviceId')?.value;
+            if (deviceId) {
+                const device = state.devices.find(d => d.id === parseInt(deviceId));
+                if (device) {
+                    const costInput = document.getElementById('deviceCostInput');
+                    const onInput = document.getElementById('scheduleOnInput');
+                    const offInput = document.getElementById('scheduleOffInput');
+
+                    if (costInput) {
+                        device.costPerHour = parseInt(costInput.value) || state.defaultCost;
+                    }
+                    if (onInput && offInput && device.mode === 'auto') {
+                        const on = onInput.value;
+                        const off = offInput.value;
+                        if (on && off && on < off) {
+                            device.scheduleOn = on;
+                            device.scheduleOff = off;
+                        }
+                    }
+                    addLog(`💾 Semua pengaturan ${device.name} disimpan`, 'success');
+                    showToast(`✅ Semua pengaturan ${device.name} disimpan!`, 'success');
+                    generateRandomNotification();
+                    checkAllSchedules();
+                    renderAll();
+                }
+            }
+            closeModal();
         }
 
         // ============================================================
@@ -1261,6 +1580,7 @@
                 device.duration = formatTime(device.totalSeconds || 0);
                 addLog(`✅ ${device.name} (${device.deviceId}) dinyalakan`, 'success');
                 showToast(`🟢 ${device.name} ON`, 'success');
+                generateRandomNotification();
             } else if (action === 'OFF') {
                 if (device.status === 'OFF') { showToast(`⚠️ ${device.name} sudah OFF`, 'warning'); return; }
                 if (device.totalSeconds === undefined) device.totalSeconds = 0;
@@ -1270,6 +1590,7 @@
                 device.duration = formatTime(device.totalSeconds || 0);
                 addLog(`🔴 ${device.name} (${device.deviceId}) dimatikan`, 'danger');
                 showToast(`🔴 ${device.name} OFF`, 'danger');
+                generateRandomNotification();
             }
             renderAll();
         }
@@ -1280,78 +1601,92 @@
 
             const cost = getDeviceCost(device);
             const totalDurasi = device.totalSeconds > 0 ? secondsToHMS(device.totalSeconds) : 'Belum menyala';
+            const isManual = device.mode === 'manual';
 
             openModal(`
-                        <h4 class="font-bold text-gray-800 text-sm mb-1">⚙️ ${device.name}</h4>
-                        <p class="text-xs text-gray-400 mb-3">${device.deviceId} | ${device.location || 'Ladang'} | Status: <span class="${getStatusColor(device.status)} font-semibold">${device.status}</span></p>
+                        <div class="modal-content-scroll">
+                            <input type="hidden" id="currentDeviceId" value="${device.id}" />
 
-                        <div class="bg-gray-50 rounded-xl p-3 space-y-2 mb-3">
-                            <div class="detail-row">
-                                <span class="text-gray-500">Device ID</span>
-                                <span class="font-mono font-semibold text-sm">${device.deviceId}</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="text-gray-500">Pairing Code</span>
-                                <span class="pairing-code">${device.pairingCode}</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="text-gray-500">Status Pairing</span>
-                                <span class="${device.isPaired ? 'text-green-600' : 'text-yellow-600'} font-semibold">${device.isPaired ? '✅ Terhubung' : '⏳ Menunggu'}</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="text-gray-500">Mode</span>
-                                <div class="flex gap-2">
-                                    <button class="mode-device-btn text-xs px-3 py-1 rounded-lg ${device.mode === 'manual' ? 'active-manual' : 'bg-gray-200 text-gray-600'}" data-device="${device.id}" data-mode="manual">Manual</button>
-                                    <button class="mode-device-btn text-xs px-3 py-1 rounded-lg ${device.mode === 'auto' ? 'active-auto' : 'bg-gray-200 text-gray-600'}" data-device="${device.id}" data-mode="auto">Auto</button>
+                            <h4 class="font-bold text-gray-800 text-sm mb-0.5">⚙️ ${device.name}</h4>
+                            <p class="text-[10px] text-gray-400 mb-1.5">${device.deviceId} | ${device.location || 'Ladang'} | Status: <span class="${getStatusColor(device.status)} font-semibold">${device.status}</span></p>
+
+                            <div class="modal-body">
+                                <div class="bg-gray-50 rounded-xl p-2 space-y-0.5 mb-1.5">
+                                    <div class="detail-row">
+                                        <span class="text-gray-500 text-[10px]">Device ID</span>
+                                        <span class="font-mono font-semibold text-xs">${device.deviceId}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="text-gray-500 text-[10px]">Pairing Code</span>
+                                        <span class="pairing-code text-sm">${device.pairingCode}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="text-gray-500 text-[10px]">Status Pairing</span>
+                                        <span class="${device.isPaired ? 'text-green-600' : 'text-yellow-600'} font-semibold text-xs">${device.isPaired ? '✅ Terhubung' : '⏳ Menunggu'}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="text-gray-500 text-[10px]">Mode</span>
+                                        <div class="flex gap-1.5">
+                                            <button class="mode-device-btn text-[10px] px-3 py-0.5 rounded-lg ${device.mode === 'manual' ? 'active-manual' : 'bg-gray-200 text-gray-600'}" data-device="${device.id}" data-mode="manual">Manual</button>
+                                            <button class="mode-device-btn text-[10px] px-3 py-0.5 rounded-lg ${device.mode === 'auto' ? 'active-auto' : 'bg-gray-200 text-gray-600'}" data-device="${device.id}" data-mode="auto">Auto</button>
+                                        </div>
+                                    </div>
+
+                                    <!-- JADWAL - TIDAK TERPOTONG -->
+                                    <div class="detail-row ${device.mode === 'manual' ? 'opacity-50' : ''}">
+                                        <span class="text-gray-500 text-[10px]">Jadwal</span>
+                                        <div class="timer-input-wrap">
+                                            <input type="time" id="scheduleOnInput" value="${device.scheduleOn || '06:00'}" class="timer-input ${device.mode === 'manual' ? 'pointer-events-none' : ''}" style="width:85px;" />
+                                            <span class="timer-separator">—</span>
+                                            <input type="time" id="scheduleOffInput" value="${device.scheduleOff || '18:00'}" class="timer-input ${device.mode === 'manual' ? 'pointer-events-none' : ''}" style="width:85px;" />
+                                        </div>
+                                    </div>
+
+                                    <div class="detail-row">
+                                        <span class="text-gray-500 text-[10px]">Status</span>
+                                        <span class="font-semibold text-xs ${getStatusColor(device.status)}">${device.status}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="text-gray-500 text-[10px]">Running</span>
+                                        <span class="font-semibold text-xs ${device.running ? 'text-green-600' : 'text-gray-400'}">${device.running ? '✅ RUN' : '⏸️ STOP'}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="text-gray-500 text-[10px]">Overload</span>
+                                        <span class="font-semibold text-xs ${device.overload ? 'text-red-600' : 'text-green-600'}">${device.overload ? '⚠️ OVERLOAD!' : '● Normal'}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="text-gray-500 text-[10px]">Durasi Menyala</span>
+                                        <span class="font-semibold text-xs text-gray-700">${totalDurasi}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="text-gray-500 text-[10px]">Biaya per Jam</span>
+                                        <div class="flex items-center gap-1">
+                                            <input id="deviceCostInput" type="number" value="${device.costPerHour || state.defaultCost}" class="w-20 p-0.5 border border-gray-200 rounded-lg text-xs text-right" />
+                                            <span class="text-[10px] text-gray-400">Rp</span>
+                                        </div>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="text-gray-500 text-[10px]">Total Biaya</span>
+                                        <span class="font-semibold text-xs text-amber-600">Rp ${Math.round(cost).toLocaleString()}</span>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="detail-row ${device.mode === 'manual' ? 'opacity-40' : ''}">
-                                <span class="text-gray-500">Jadwal</span>
-                                <div class="flex items-center gap-1">
-                                    <input type="time" id="scheduleOnInput" value="${device.scheduleOn || '06:00'}" class="timer-input ${device.mode === 'manual' ? 'pointer-events-none' : ''}" />
-                                    <span class="text-xs text-gray-400">-</span>
-                                    <input type="time" id="scheduleOffInput" value="${device.scheduleOff || '18:00'}" class="timer-input ${device.mode === 'manual' ? 'pointer-events-none' : ''}" />
-                                    <button id="saveScheduleBtn" class="text-[10px] text-green-600 font-medium ml-1 ${device.mode === 'manual' ? 'opacity-40 pointer-events-none' : ''}">Simpan</button>
-                                </div>
+                            <div class="flex gap-2 mb-1">
+                                <button class="btn-farm bg-green-600 text-white text-xs flex-1" onclick="controlDeviceFromModal(${device.id},'ON')" style="padding:5px 0;font-size:0.65rem;">
+                                    <i class="fas fa-play text-[8px]"></i> ON
+                                </button>
+                                <button class="btn-farm bg-red-500 text-white text-xs flex-1" onclick="controlDeviceFromModal(${device.id},'OFF')" style="padding:5px 0;font-size:0.65rem;">
+                                    <i class="fas fa-stop text-[8px]"></i> OFF
+                                </button>
                             </div>
 
-                            <div class="detail-row">
-                                <span class="text-gray-500">Status</span>
-                                <span class="font-semibold ${getStatusColor(device.status)}">${device.status}</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="text-gray-500">Running</span>
-                                <span class="font-semibold ${device.running ? 'text-green-600' : 'text-gray-400'}">${device.running ? '✅ RUN' : '⏸️ STOP'}</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="text-gray-500">Overload</span>
-                                <span class="font-semibold ${device.overload ? 'text-red-600' : 'text-green-600'}">${device.overload ? '⚠️ OVERLOAD!' : '● Normal'}</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="text-gray-500">Durasi Menyala</span>
-                                <span class="font-semibold text-gray-700">${totalDurasi}</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="text-gray-500">Biaya per Jam</span>
-                                <input id="deviceCostInput" type="number" value="${device.costPerHour || state.defaultCost}" class="w-24 p-1 border border-gray-200 rounded-lg text-sm text-right" />
-                                <span class="text-xs text-gray-400">Rp</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="text-gray-500">Total Biaya</span>
-                                <span class="font-semibold text-amber-600">Rp ${Math.round(cost).toLocaleString()}</span>
-                            </div>
-                        </div>
+                            <button class="btn-save-all" onclick="saveAllSettings()" style="padding:6px 0;font-size:0.65rem;">
+                                <i class="fas fa-save"></i> Simpan Semua Pengaturan
+                            </button>
 
-                        <div class="flex gap-2 mb-2">
-                            <button class="btn-farm bg-green-600 text-white text-xs flex-1" onclick="controlDeviceFromModal(${device.id},'ON')">
-                                <i class="fas fa-play"></i> ON
-                            </button>
-                            <button class="btn-farm bg-red-500 text-white text-xs flex-1" onclick="controlDeviceFromModal(${device.id},'OFF')">
-                                <i class="fas fa-stop"></i> OFF
-                            </button>
+                            <button class="btn-farm bg-gray-200 text-gray-700 text-xs mt-1" onclick="closeModal(); renderAll();" style="padding:5px 0;font-size:0.65rem;">Tutup</button>
                         </div>
-                        <button class="btn-farm bg-gray-200 text-gray-700 text-xs" onclick="closeModal(); renderAll();">Tutup</button>
                     `);
 
             // Mode device
@@ -1366,23 +1701,24 @@
                             const m = b.dataset.mode;
                             if (m === mode) {
                                 b.className =
-                                    `mode-device-btn text-xs px-3 py-1 rounded-lg ${mode === 'manual' ? 'active-manual' : 'active-auto'}`;
+                                    `mode-device-btn text-[10px] px-3 py-0.5 rounded-lg ${mode === 'manual' ? 'active-manual' : 'active-auto'}`;
                             } else {
                                 b.className =
-                                    'mode-device-btn text-xs px-3 py-1 rounded-lg bg-gray-200 text-gray-600';
+                                    'mode-device-btn text-[10px] px-3 py-0.5 rounded-lg bg-gray-200 text-gray-600';
                             }
                         });
                         const row = btn.closest('.detail-row');
                         const inputs = row.parentElement.querySelectorAll('.timer-input');
-                        const saveBtn = row.parentElement.querySelector('#saveScheduleBtn');
+                        const wrap = row.parentElement.querySelector('.timer-input-wrap');
+                        const parentRow = wrap?.closest('.detail-row');
                         if (mode === 'manual') {
-                            inputs.forEach(inp => { inp.classList.add('pointer-events-none');
-                                inp.style.opacity = '0.5'; });
-                            if (saveBtn) { saveBtn.classList.add('pointer-events-none', 'opacity-40'); }
+                            inputs.forEach(inp => { inp.disabled = true;
+                                inp.classList.add('pointer-events-none'); });
+                            if (parentRow) parentRow.classList.add('opacity-50');
                         } else {
-                            inputs.forEach(inp => { inp.classList.remove('pointer-events-none');
-                                inp.style.opacity = '1'; });
-                            if (saveBtn) { saveBtn.classList.remove('pointer-events-none', 'opacity-40'); }
+                            inputs.forEach(inp => { inp.disabled = false;
+                                inp.classList.remove('pointer-events-none'); });
+                            if (parentRow) parentRow.classList.remove('opacity-50');
                             const on = document.getElementById('scheduleOnInput').value;
                             const off = document.getElementById('scheduleOffInput').value;
                             if (on && off && on < off) {
@@ -1393,31 +1729,13 @@
                         }
                         addLog(`🔄 ${dev.name} mode: ${mode === 'manual' ? 'Manual' : 'Auto'}`, 'info');
                         showToast(`🔄 Mode ${mode === 'manual' ? 'Manual' : 'Auto'} untuk ${dev.name}`, 'info');
+                        generateRandomNotification();
                         renderAll();
                     }
                 });
             });
 
-            // Save schedule
-            document.getElementById('saveScheduleBtn')?.addEventListener('click', function() {
-                const on = document.getElementById('scheduleOnInput').value;
-                const off = document.getElementById('scheduleOffInput').value;
-                if (on >= off) {
-                    showToast('⚠️ ON harus sebelum OFF!', 'danger');
-                    return;
-                }
-                const dev = state.devices.find(d => d.id === device.id);
-                if (dev) {
-                    dev.scheduleOn = on;
-                    dev.scheduleOff = off;
-                    addLog(`⏱️ Jadwal ${dev.name}: ${on}-${off}`, 'success');
-                    showToast(`✅ Jadwal ${dev.name}: ${on}-${off}`, 'success');
-                    checkAllSchedules();
-                    renderAll();
-                }
-            });
-
-            // Biaya
+            // Biaya - auto save
             document.getElementById('deviceCostInput')?.addEventListener('change', function() {
                 const val = parseInt(this.value) || state.defaultCost;
                 const dev = state.devices.find(d => d.id === device.id);
@@ -1457,6 +1775,7 @@
                 device.duration = formatTime(device.totalSeconds || 0);
                 addLog(`✅ ${device.name} (${device.deviceId}) dinyalakan`, 'success');
                 showToast(`🟢 ${device.name} ON`, 'success');
+                generateRandomNotification();
             } else {
                 if (device.status === 'OFF') { showToast(`⚠️ ${device.name} sudah OFF`, 'warning'); return; }
                 if (device.totalSeconds === undefined) device.totalSeconds = 0;
@@ -1466,6 +1785,7 @@
                 device.duration = formatTime(device.totalSeconds || 0);
                 addLog(`🔴 ${device.name} (${device.deviceId}) dimatikan`, 'danger');
                 showToast(`🔴 ${device.name} OFF`, 'danger');
+                generateRandomNotification();
             }
 
             state.focusDeviceId = id;
@@ -1537,7 +1857,7 @@
         }
 
         // ============================================================
-        // ADD DEVICE - UNIK & TERINTEGRASI
+        // ADD DEVICE
         // ============================================================
         function openAddDeviceModal() {
             const newPairingCode = generatePairingCode();
@@ -1545,11 +1865,10 @@
 
             openModal(`
                         <h4 class="font-bold text-gray-800 text-sm mb-1">🔗 Pairing Perangkat Baru</h4>
-                        <p class="text-xs text-gray-400 mb-3">Scan QR Code atau masukkan kode pairing manual</p>
+                        <p class="text-[10px] text-gray-400 mb-2">Scan QR Code atau masukkan kode pairing manual</p>
 
-                        <!-- QR Code Simulasi -->
-                        <div class="qr-placeholder mb-3">
-                            <div class="qr-pattern">
+                        <div class="qr-placeholder mb-2" style="width:90px;height:90px;">
+                            <div class="qr-pattern" style="width:60px;height:60px;">
                                 ${Array(100).fill(0).map((_, i) => {
                                     const row = Math.floor(i / 10);
                                     const col = i % 10;
@@ -1561,38 +1880,38 @@
                             <div class="scan-overlay"></div>
                         </div>
 
-                        <div class="text-center mb-3">
-                            <p class="text-xs text-gray-500">Kode Pairing</p>
-                            <div class="pairing-code">${newPairingCode}</div>
-                            <p class="text-[8px] text-gray-400 mt-1">Masukkan kode ini di panel kontrol fisik</p>
+                        <div class="text-center mb-2">
+                            <p class="text-[10px] text-gray-500">Kode Pairing</p>
+                            <div class="pairing-code text-sm">${newPairingCode}</div>
+                            <p class="text-[7px] text-gray-400 mt-0.5">Masukkan kode ini di panel kontrol fisik</p>
                         </div>
 
-                        <div class="space-y-2">
-                            <input id="newDeviceName" type="text" placeholder="Nama perangkat (contoh: Sawah Baru)" class="w-full p-2 border border-gray-200 rounded-xl text-sm" />
-                            <input id="newDeviceLocation" type="text" placeholder="Lokasi (contoh: Ladang 3)" class="w-full p-2 border border-gray-200 rounded-xl text-sm" />
-                            <div class="flex gap-4">
-                                <label class="text-xs font-medium text-gray-600 flex items-center gap-2">
+                        <div class="space-y-1.5">
+                            <input id="newDeviceName" type="text" placeholder="Nama perangkat" class="w-full p-1.5 border border-gray-200 rounded-lg text-xs" />
+                            <input id="newDeviceLocation" type="text" placeholder="Lokasi" class="w-full p-1.5 border border-gray-200 rounded-lg text-xs" />
+                            <div class="flex gap-3">
+                                <label class="text-[10px] font-medium text-gray-600 flex items-center gap-1.5">
                                     <input type="radio" name="newDeviceMode" value="manual" checked /> Manual
                                 </label>
-                                <label class="text-xs font-medium text-gray-600 flex items-center gap-2">
+                                <label class="text-[10px] font-medium text-gray-600 flex items-center gap-1.5">
                                     <input type="radio" name="newDeviceMode" value="auto" /> Auto
                                 </label>
                             </div>
-                            <div class="flex gap-2 items-center text-xs text-gray-600">
+                            <div class="flex gap-1.5 items-center text-[10px] text-gray-600">
                                 <span>Jadwal:</span>
-                                <input type="time" id="newScheduleOn" value="06:00" class="timer-input" />
-                                <span>-</span>
-                                <input type="time" id="newScheduleOff" value="18:00" class="timer-input" />
+                                <input type="time" id="newScheduleOn" value="06:00" class="timer-input" style="width:75px;" />
+                                <span class="timer-separator">—</span>
+                                <input type="time" id="newScheduleOff" value="18:00" class="timer-input" style="width:75px;" />
                             </div>
                         </div>
 
-                        <div class="flex gap-2 mt-3">
-                            <button id="confirmAddDevice" class="btn-farm bg-green-600 text-white text-sm flex-1">
+                        <div class="flex gap-2 mt-2">
+                            <button id="confirmAddDevice" class="btn-farm bg-green-600 text-white text-xs flex-1" style="padding:5px 0;font-size:0.65rem;">
                                 <i class="fas fa-link"></i> Pair & Tambah
                             </button>
-                            <button class="btn-farm bg-gray-200 text-gray-700 text-sm flex-1" onclick="closeModal()">Batal</button>
+                            <button class="btn-farm bg-gray-200 text-gray-700 text-xs flex-1" onclick="closeModal()" style="padding:5px 0;font-size:0.65rem;">Batal</button>
                         </div>
-                        <p class="text-[8px] text-gray-400 text-center mt-2">*Device akan otomatis terintegrasi setelah pairing</p>
+                        <p class="text-[7px] text-gray-400 text-center mt-1">*Device akan otomatis terintegrasi setelah pairing</p>
                     `);
 
             document.getElementById('confirmAddDevice').addEventListener('click', function() {
@@ -1630,6 +1949,7 @@
 
                 addLog(`🔗 Device baru dipair: ${name} (${newDeviceId})`, 'success');
                 showToast(`✅ ${name} berhasil dipair!`, 'success');
+                generateRandomNotification();
                 renderAll();
                 closeModal();
             });
@@ -1650,11 +1970,9 @@
             }
         });
 
-        // Add device - menggunakan sistem pairing unik
         document.getElementById('addDeviceBtn').addEventListener('click', openAddDeviceModal);
         document.getElementById('addDeviceMgmtBtn').addEventListener('click', openAddDeviceModal);
 
-        // Clear logs
         document.getElementById('clearLogBtn').addEventListener('click', function() {
             if (state.logs.length === 0) { showToast('📭 Kosong', 'info'); return; }
             if (confirm('🗑️ Hapus semua riwayat?')) {
@@ -1667,7 +1985,6 @@
             document.getElementById('clearLogBtn').click();
         });
 
-        // Toggles
         document.getElementById('toggleNotif').addEventListener('click', function() {
             this.classList.toggle('active');
             state.settings.notifications = this.classList.contains('active');
@@ -1686,7 +2003,6 @@
             renderAll();
         });
 
-        // Reset all
         document.getElementById('resetAllBtn').addEventListener('click', function() {
             if (!confirm('Reset semua pengaturan?')) return;
             state.settings = { notifications: true, autoRetry: true };
@@ -1708,28 +2024,21 @@
                 d.isPaired = true;
             });
             state.focusDeviceId = state.devices[0]?.id || 1;
+            state.notifications = [];
+            updateBadge();
             addLog('🔄 Sistem direset', 'warning');
             showToast('🔄 Reset selesai', 'warning');
             renderAll();
             navigateTo('pageHome');
         });
 
-        // Notifications
         document.getElementById('notifBtn').addEventListener('click', function() {
-            const list = state.notifications.map((n, i) =>
-                `<div class="flex items-center gap-2 text-xs border-b border-gray-100 py-1.5 last:border-0">
-                            <span class="text-gray-400">${i+1}.</span>
-                            <span class="text-gray-700">${n}</span>
-                        </div>`
-            ).join('') || '<p class="text-gray-400 text-center py-2 text-xs">Kosong</p>';
-            openModal(`
-                        <h4 class="font-bold text-gray-800 text-sm mb-2">🔔 Notifikasi</h4>
-                        <div class="max-h-48 overflow-y-auto">${list}</div>
-                        <button class="btn-farm bg-gray-200 text-gray-700 text-sm mt-2" onclick="closeModal()">Tutup</button>
-                    `);
+            document.getElementById('notifBadge').classList.add('hidden');
+            markAllAsRead();
+            renderNotificationModal();
+            document.getElementById('modalOverlay').classList.add('open');
         });
 
-        // Menu
         document.getElementById('menuBtn').addEventListener('click', function() {
             openModal(`
                         <h4 class="font-bold text-gray-800 text-sm mb-2">📋 Menu</h4>
@@ -1771,9 +2080,13 @@
         // INIT
         // ============================================================
         function init() {
+            generateRandomNotification();
+            generateRandomNotification();
+            generateRandomNotification();
+
             addLog('🌾 Re-Tech AgroPump siap', 'success');
             addLog('📡 Sinyal terdeteksi', 'info');
-            addLog('✅ ${state.devices.length} perangkat terhubung', 'success');
+            addLog(`✅ ${state.devices.length} perangkat terhubung`, 'success');
 
             setTimeout(() => {
                 checkAllSchedules();
@@ -1784,7 +2097,6 @@
             startTimer();
             startSignal();
             console.log('🌾 Re-Tech AgroPump loaded!');
-            console.log('📱 Device pairing system active');
             console.log('Shortcuts: 1=ON, 2=OFF, ↑↓=Switch Device');
         }
 
