@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>🌾 Smart Pump</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f0f4f0;
+        }
+        body {
+            max-width: 420px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            height: 100dvh;
+            position: relative;
+        }
+
+        .card {
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .pulse-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(0.85);
+            }
+        }
+
+        .signal-bar {
+            height: 5px;
+            border-radius: 2px;
+            transition: background 0.3s;
+        }
+
+        .btn-farm {
+            padding: 8px 0;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            transition: all 0.15s;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        .btn-farm:active {
+            transform: scale(0.95);
+        }
+        .btn-farm:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        .btn-sm {
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-sm:active {
+            transform: scale(0.93);
+        }
+
+        .toggle-track {
+            width: 38px;
+            height: 22px;
+            background: #d1d5db;
+            border-radius: 11px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+            flex-shrink: 0;
+        }
+        .toggle-track.active {
+            background: #2e7d32;
+        }
+        .toggle-thumb {
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+        }
+        .toggle-track.active .toggle-thumb {
+            transform: translateX(16px);
+        }
+
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            padding: 3px 0 6px;
+            flex-shrink: 0;
+        }
+        .bottom-nav .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.5rem;
+            color: #9ca3af;
+            padding: 2px 6px;
+            border-radius: 8px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+            transition: color 0.2s;
+        }
+        .bottom-nav .nav-item.active {
+            color: #2e7d32;
+        }
+        .bottom-nav .nav-item i {
+            font-size: 1rem;
+            margin-bottom: 1px;
+        }
+
+        .page-container {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+        .page {
+            display: none;
+            height: 100%;
+            overflow: hidden;
+            padding: 0 10px 6px;
+            animation: fadeUp 0.25s ease;
+        }
+        .page.active {
+            display: flex;
+            flex-direction: column;
+        }
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2px 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        .scroll-area::-webkit-scrollbar {
+            width: 2px;
+            background: transparent;
+        }
+        .scroll-area::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 4px;
+        }
+
+        .device-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.15s;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .device-item:active {
+            background: #f3f4f6;
+        }
+        .device-item:last-child {
+            border-bottom: none;
+        }
+
+        .device-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .toast-farm {
+            position: fixed;
+            top: 65px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px);
+            padding: 8px 18px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            z-index: 100;
+            max-width: 350px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        .toast-farm.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(3px);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .modal-overlay.open {
+            display: flex;
+        }
+        .modal-box {
+            background: white;
+            border-radius: 18px;
+            max-width: 370px;
+            width: 100%;
+            padding: 18px;
+            animation: modalPop 0.2s ease;
+            max-height: 92vh;
+            overflow-y: auto;
+        }
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.92);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .log-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.65rem;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .log-item:last-child {
+            border-bottom: none;
+        }
+
+        .header-compact {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 12px 4px;
+            flex-shrink: 0;
+            background: white;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        /* MODE SELECTOR - WARNA PEMBEDA JELAS */
+        .mode-selector {
+            display: flex;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid #d1d5db;
+        }
+        .mode-selector button {
+            flex: 1;
+            padding: 4px 12px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            background: #f3f4f6;
+            color: #9ca3af;
+        }
+        .mode-selector button.active-manual {
+            background: #1e40af !important;
+            color: white !important;
+            border-color: #1e40af;
+            box-shadow: 0 2px 8px rgba(30, 64, 175, 0.3);
+        }
+        .mode-selector button.active-auto {
+            background: #16a34a !important;
+            color: white !important;
+            border-color: #16a34a;
+            box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3);
+        }
+        .mode-selector button:active {
+            transform: scale(0.95);
+        }
+
+        .badge-xs {
+            font-size: 0.5rem;
+            padding: 1px 6px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .flex-shrink-0 {
+            flex-shrink: 0;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 0.75rem;
+        }
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .log-container-home {
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .log-container-home .scroll-area {
+            flex: 1;
+            overflow-y: auto;
+            min-height: 0;
+        }
+
+        /* tombol hapus device */
+        .delete-btn:hover {
+            background: #fee2e2 !important;
+            color: #dc2626 !important;
+        }
+
+        .text-green-700 {
+            color: #2e7d32;
+        }
+        .bg-green-700 {
+            background: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== TOAST ===== -->
+    <div id="toast" class="toast-farm"></div>
+
+    <!-- ===== HEADER ===== -->
+    <header class="header-compact">
+        <div class="flex items-center gap-2">
+            <span class="text-lg">🌾</span>
+            <span class="font-bold text-gray-800 text-sm">Smart Pump</span>
+        </div>
+        <div class="flex items-center gap-3">
+            <button id="notifBtn" class="relative text-gray-600 text-sm">
+                <i class="fas fa-bell"></i>
+                <span id="notifBadge" class="absolute -top-1 -right-2 bg-red-500 text-white text-[7px] w-4 h-4 rounded-full flex items-center justify-center font-bold">3</span>
+            </button>
+            <button id="menuBtn" class="text-gray-600 text-sm">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- ===== PAGE CONTAINER ===== -->
+    <div class="page-container">
+
+        <!-- ===== PAGE HOME ===== -->
+        <div id="pageHome" class="page active">
+
+            <!-- Signal & Mode -->
+            <div class="flex items-center justify-between gap-2 flex-shrink-0 py-1">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-signal text-green-600 text-sm"></i>
+                    <div class="flex gap-0.5">
+                        <div id="sig1" class="signal-bar bg-green-500 w-4"></div>
+                        <div id="sig2" class="signal-bar bg-green-500 w-4"></div>
+                        <div id="sig3" class="signal-bar bg-green-500 w-4"></div>
+                        <div id="sig4" class="signal-bar bg-green-500 w-4"></div>
+                        <div id="sig5" class="signal-bar bg-gray-300 w-4"></div>
+                    </div>
+                    <span id="signalPercent" class="text-xs font-bold text-green-700">85%</span>
+                </div>
+                <div class="mode-selector w-28">
+                    <button id="modeManual" class="active-manual">Manual</button>
+                    <button id="modeAuto">Auto</button>
+                </div>
+            </div>
+
+            <!-- Status Card -->
+            <div class="card p-2.5 flex items-center justify-between flex-shrink-0 mt-0.5">
+                <div class="flex items-center gap-3">
+                    <div class="flex flex-col items-center">
+                        <span id="statusDot" class="pulse-dot bg-green-500"></span>
+                        <span id="statusLabel" class="text-[9px] font-bold text-green-700">RUN</span>
+                    </div>
+                    <div>
+                        <div class="text-lg font-bold text-gray-800 font-mono" id="timerDisplay">01:23:45</div>
+                        <div class="flex items-center gap-2 text-[9px] text-gray-400">
+                            <span id="overloadLabel" class="text-green-600">● Normal</span>
+                            <span>|</span>
+                            <span id="deviceNameLabel">Sawah Utara</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-1.5">
+                    <button id="btnStart" class="btn-farm bg-green-600 text-white px-3 py-1.5 text-[10px] rounded-lg">
+                        <i class="fas fa-play text-[8px]"></i> ON
+                    </button>
+                    <button id="btnStop" class="btn-farm bg-red-500 text-white px-3 py-1.5 text-[10px] rounded-lg">
+                        <i class="fas fa-stop text-[8px]"></i> OFF
+                    </button>
+                </div>
+            </div>
+
+            <!-- Timer & Biaya -->
+            <div class="grid grid-cols-2 gap-2 flex-shrink-0 mt-1">
+                <div class="card p-1.5 flex items-center justify-between">
+                    <div class="flex items-center gap-1.5">
+                        <i class="fas fa-clock text-green-600 text-[10px]"></i>
+                        <span class="text-[9px] text-gray-500">Jadwal</span>
+                    </div>
+                    <span id="scheduleDisplay" class="text-[10px] font-semibold text-gray-700">06:00-18:00</span>
+                    <button id="editScheduleBtn" class="text-[9px] text-green-700 font-medium">✏️</button>
+                </div>
+                <div class="card p-1.5 flex items-center justify-between">
+                    <div class="flex items-center gap-1.5">
+                        <i class="fas fa-coins text-amber-500 text-[10px]"></i>
+                        <span class="text-[9px] text-gray-500">Biaya</span>
+                    </div>
+                    <span id="costDisplay" class="text-[10px] font-bold text-amber-600">Rp 0</span>
+                    <button id="editCostBtn" class="text-[9px] text-green-700 font-medium">⚙️</button>
+                </div>
+            </div>
+
+            <!-- Device List -->
+            <div class="card p-1.5 flex-1 mt-1 overflow-hidden flex flex-col" style="min-height:0;">
+                <div class="flex items-center justify-between flex-shrink-0 mb-0.5">
+                    <span class="text-[10px] font-bold text-gray-700">
+                        <i class="fas fa-server text-green-600 mr-1"></i> Perangkat
+                        <span id="deviceCount" class="text-gray-400 font-normal">(3)</span>
+                    </span>
+                    <button id="addDeviceBtn" class="btn-sm bg-green-100 text-green-700 text-[9px]">
+                        <i class="fas fa-plus"></i> Tambah
+                    </button>
+                </div>
+                <div id="deviceList" class="scroll-area flex-1" style="min-height:0;">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+
+            <!-- History Log -->
+            <div class="card p-1.5 flex-shrink-0 mt-1 log-container-home" style="height:110px; min-height:0;">
+                <div class="flex items-center justify-between flex-shrink-0">
+                    <span class="text-[10px] font-bold text-gray-700">
+                        <i class="fas fa-history text-gray-500 mr-1"></i> Riwayat
+                    </span>
+                    <button id="clearLogBtn" class="text-[9px] text-red-400 font-medium hover:text-red-600">Hapus</button>
+                </div>
+                <div id="logContainer" class="scroll-area flex-1 text-[10px]" style="min-height:0;">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ===== PAGE TIMER ===== -->
+        <div id="pageTimer" class="page">
+            <div class="scroll-area">
+                <div class="card p-4 space-y-3">
+                    <h4 class="font-bold text-gray-800 text-sm"><i class="fas fa-calendar-day text-green-600 mr-2"></i>Pengaturan Timer</h4>
+
+                    <div>
+                        <label class="text-xs font-medium text-gray-600">Jam ON</label>
+                        <input id="timerOnInput" type="time" value="06:00" class="w-full p-2 border border-gray-200 rounded-xl text-sm font-semibold" />
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium text-gray-600">Jam OFF</label>
+                        <input id="timerOffInput" type="time" value="18:00" class="w-full p-2 border border-gray-200 rounded-xl text-sm font-semibold" />
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-medium text-gray-600">Biaya per Jam (Rp)</label>
+                        <input id="costPerHourInput" type="number" value="5000" class="w-full p-2 border border-gray-200 rounded-xl text-sm font-semibold" />
+                    </div>
+
+                    <button id="saveTimerBtn" class="btn-farm bg-green-600 text-white text-sm">
+                        <i class="fas fa-save"></i> Simpan Timer
+                    </button>
+                    <button id="resetTimerBtn" class="btn-farm bg-gray-200 text-gray-700 text-sm">
+                        <i class="fas fa-undo"></i> Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== PAGE DEVICE ===== -->
+        <div id="pageDevice" class="page">
+            <div class="scroll-area">
+                <div class="card p-4 space-y-2">
+                    <h4 class="font-bold text-gray-800 text-sm"><i class="fas fa-server text-green-600 mr-2"></i>Kelola Perangkat</h4>
+                    <div id="deviceManagementList" class="space-y-1.5">
+                        <!-- Rendered by JS -->
+                    </div>
+                    <button id="addDeviceMgmtBtn" class="btn-farm bg-green-600 text-white text-sm mt-2">
+                        <i class="fas fa-plus"></i> Tambah Perangkat
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== PAGE SETTINGS ===== -->
+        <div id="pageSettings" class="page">
+            <div class="scroll-area">
+                <div class="card p-4 space-y-3">
+                    <h4 class="font-bold text-gray-800 text-sm"><i class="fas fa-cog text-green-600 mr-2"></i>Pengaturan</h4>
+
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-medium text-gray-800 text-sm">Notifikasi</p>
+                            <p class="text-[10px] text-gray-400">Status & peringatan</p>
+                        </div>
+                        <div id="toggleNotif" class="toggle-track active">
+                            <div class="toggle-thumb"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-medium text-gray-800 text-sm">Auto-Retry</p>
+                            <p class="text-[10px] text-gray-400">Ulangi 3x jika gagal</p>
+                        </div>
+                        <div id="toggleRetry" class="toggle-track active">
+                            <div class="toggle-thumb"></div>
+                        </div>
+                    </div>
+
+                    <hr class="my-1" />
+
+                    <button id="resetAllBtn" class="btn-farm bg-red-500 text-white text-sm">
+                        <i class="fas fa-power-off"></i> Reset Semua
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== PAGE LOG ===== -->
+        <div id="pageLog" class="page">
+            <div class="scroll-area">
+                <div class="card p-4 space-y-2">
+                    <h4 class="font-bold text-gray-800 text-sm"><i class="fas fa-history text-green-600 mr-2"></i>Riwayat Lengkap</h4>
+                    <div id="logFullContainer" class="space-y-1 max-h-[420px] overflow-y-auto">
+                        <!-- Rendered by JS -->
+                    </div>
+                    <button id="clearLogFullBtn" class="btn-farm bg-red-100 text-red-600 text-sm">
+                        <i class="fas fa-trash"></i> Hapus Semua Riwayat
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ===== BOTTOM NAV ===== -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" data-page="pageHome">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </button>
+        <button class="nav-item" data-page="pageTimer">
+            <i class="fas fa-clock"></i>
+            <span>Timer</span>
+        </button>
+        <button class="nav-item" data-page="pageDevice">
+            <i class="fas fa-server"></i>
+            <span>Device</span>
+        </button>
+        <button class="nav-item" data-page="pageLog">
+            <i class="fas fa-history"></i>
+            <span>Log</span>
+        </button>
+        <button class="nav-item" data-page="pageSettings">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+        </button>
+    </nav>
+
+    <!-- ===== MODAL ===== -->
+    <div id="modalOverlay" class="modal-overlay">
+        <div class="modal-box" id="modalContent">
+            <!-- Rendered by JS -->
+        </div>
+    </div>
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+        // ============================================================
+        // STATE
+        // ============================================================
+        const state = {
+            pumpStatus: 'RUNNING',
+            mode: 'manual',
+            timerSeconds: 5025,
+            scheduleOn: '06:00',
+            scheduleOff: '18:00',
+            signalStrength: 85,
+            costPerHour: 5000,
+            totalCost: 0,
+            devices: [
+                { id: 1, name: 'Sawah Utara', status: 'ON', duration: '01:23:45', totalSeconds: 5025 },
+                { id: 2, name: 'Sawah Selatan', status: 'OFF', duration: '--:--:--', totalSeconds: 0 },
+                { id: 3, name: 'Kebun Mangga', status: 'SCH', duration: '17:00', totalSeconds: 0 },
+            ],
+            logs: [],
+            notifications: ['✅ Pompa menyala 06:00', '⚠️ Sinyal lemah', '✅ Timer disimpan'],
+            settings: { notifications: true, autoRetry: true },
+            deviceCounter: 4,
+            timerInterval: null,
+            signalInterval: null,
+            currentPage: 'pageHome',
+        };
+
+        // ============================================================
+        // UTILITY
+        // ============================================================
+        function formatTime(s) {
+            const h = String(Math.floor(s / 3600)).padStart(2, '0');
+            const m = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
+            const sec = String(s % 60).padStart(2, '0');
+            return `${h}:${m}:${sec}`;
+        }
+
+        function secondsToHMS(sec) {
+            const h = Math.floor(sec / 3600);
+            const m = Math.floor((sec % 3600) / 60);
+            let r = '';
+            if (h > 0) r += h + 'j ';
+            if (m > 0) r += m + 'm';
+            if (!r) r = '0m';
+            return r.trim();
+        }
+
+        function getDotColor(status) {
+            const map = { 'ON': 'bg-green-500', 'OFF': 'bg-gray-400', 'SCH': 'bg-yellow-500' };
+            return map[status] || 'bg-gray-400';
+        }
+
+        function getStatusText(status) {
+            const map = { 'ON': 'ON', 'OFF': 'OFF', 'SCH': 'SCH' };
+            return map[status] || 'OFF';
+        }
+
+        function getStatusColor(status) {
+            const map = { 'ON': 'text-green-600', 'OFF': 'text-gray-400', 'SCH': 'text-yellow-600' };
+            return map[status] || 'text-gray-400';
+        }
+
+        function getStatusBg(status) {
+            const map = { 'ON': 'bg-green-100 text-green-600', 'OFF': 'bg-gray-100 text-gray-400',
+                'SCH': 'bg-yellow-100 text-yellow-600' };
+            return map[status] || 'bg-gray-100 text-gray-400';
+        }
+
+        function getDeviceCost(device) {
+            if (device.status !== 'ON' || device.totalSeconds === 0) return 0;
+            return (device.totalSeconds / 3600) * state.costPerHour;
+        }
+
+        // ============================================================
+        // TOAST
+        // ============================================================
+        let toastTimer = null;
+
+        function showToast(msg, type = 'info') {
+            const el = document.getElementById('toast');
+            const colors = { success: 'bg-green-600 text-white', danger: 'bg-red-600 text-white',
+                warning: 'bg-yellow-600 text-white', info: 'bg-blue-600 text-white' };
+            el.className = `toast-farm ${colors[type] || colors.info}`;
+            el.textContent = msg;
+            void el.offsetWidth;
+            el.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+        }
+
+        // ============================================================
+        // MODAL
+        // ============================================================
+        function openModal(html) {
+            document.getElementById('modalContent').innerHTML = html;
+            document.getElementById('modalOverlay').classList.add('open');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('open');
+        }
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // ============================================================
+        // RENDER
+        // ============================================================
+        function renderStatus() {
+            const isRunning = state.pumpStatus === 'RUNNING';
+            document.getElementById('statusDot').className = `pulse-dot ${isRunning ? 'bg-green-500' : 'bg-gray-400'}`;
+            document.getElementById('statusLabel').textContent = isRunning ? 'RUN' : 'OFF';
+            document.getElementById('statusLabel').className = `text-[9px] font-bold ${isRunning ? 'text-green-700' : 'text-gray-400'}`;
+            document.getElementById('timerDisplay').textContent = formatTime(state.timerSeconds);
+            document.getElementById('overloadLabel').textContent = '● Normal';
+            document.getElementById('overloadLabel').className = 'text-green-600';
+            document.getElementById('btnStart').disabled = isRunning;
+            document.getElementById('btnStop').disabled = !isRunning;
+        }
+
+        function renderSignal() {
+            const s = state.signalStrength;
+            const filled = Math.floor(s / 20);
+            const color = s >= 70 ? 'bg-green-500' : s >= 40 ? 'bg-yellow-500' : 'bg-red-500';
+            for (let i = 1; i <= 5; i++) {
+                const el = document.getElementById('sig' + i);
+                el.className = `signal-bar ${i <= filled ? color : 'bg-gray-300'} w-4`;
+            }
+            document.getElementById('signalPercent').textContent = s + '%';
+        }
+
+        function renderSchedule() {
+            document.getElementById('scheduleDisplay').textContent = `${state.scheduleOn}-${state.scheduleOff}`;
+            document.getElementById('timerOnInput').value = state.scheduleOn;
+            document.getElementById('timerOffInput').value = state.scheduleOff;
+            document.getElementById('costPerHourInput').value = state.costPerHour;
+        }
+
+        function renderCost() {
+            const hours = state.timerSeconds / 3600;
+            state.totalCost = hours * state.costPerHour;
+            document.getElementById('costDisplay').textContent = `Rp ${Math.round(state.totalCost).toLocaleString()}`;
+        }
+
+        function renderDevices() {
+            const container = document.getElementById('deviceList');
+            container.innerHTML = state.devices.map(d => `
+                        <div class="device-item" data-id="${d.id}">
+                            <span class="device-dot ${getDotColor(d.status)}"></span>
+                            <span class="text-[10px] font-medium text-gray-700 flex-1 truncate">${d.name}</span>
+                            <span class="text-[9px] ${getStatusColor(d.status)} font-semibold">${getStatusText(d.status)}</span>
+                            <span class="text-[9px] text-gray-400">${d.duration}</span>
+                            <button class="device-detail-btn text-gray-400 text-[10px] hover:text-green-600" data-id="${d.id}">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    `).join('');
+
+            // Detail button
+            document.querySelectorAll('.device-detail-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const id = parseInt(this.dataset.id);
+                    const d = state.devices.find(x => x.id === id);
+                    if (!d) return;
+
+                    const cost = getDeviceCost(d);
+                    const totalDurasi = d.totalSeconds > 0 ? secondsToHMS(d.totalSeconds) : 'Belum menyala';
+
+                    openModal(`
+                                <h4 class="font-bold text-gray-800 text-sm mb-1">📊 ${d.name}</h4>
+                                <p class="text-xs text-gray-400 mb-3">ID: ${d.id} | Status: <span class="${getStatusColor(d.status)} font-semibold">${d.status}</span></p>
+
+                                <div class="bg-gray-50 rounded-xl p-3 space-y-1.5 mb-3">
+                                    <div class="detail-row">
+                                        <span class="text-gray-500">Status</span>
+                                        <span class="font-semibold ${getStatusColor(d.status)}">${d.status}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="text-gray-500">Durasi Menyala</span>
+                                        <span class="font-semibold text-gray-700">${totalDurasi}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="text-gray-500">Biaya</span>
+                                        <span class="font-semibold text-amber-600">Rp ${Math.round(cost).toLocaleString()}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="text-gray-500">Terakhir Update</span>
+                                        <span class="text-gray-500 text-[10px]">${new Date().toLocaleTimeString('id-ID', {hour:'2-digit',minute:'2-digit'})}</span>
+                                    </div>
+                                </div>
+
+                                <div class="flex gap-2 mb-2">
+                                    <button class="btn-farm bg-green-600 text-white text-xs flex-1" onclick="controlDevice(${d.id},'ON')">
+                                        <i class="fas fa-play"></i> ON
+                                    </button>
+                                    <button class="btn-farm bg-red-500 text-white text-xs flex-1" onclick="controlDevice(${d.id},'OFF')">
+                                        <i class="fas fa-stop"></i> OFF
+                                    </button>
+                                </div>
+                                <button class="btn-farm bg-gray-200 text-gray-700 text-xs" onclick="closeModal()">Tutup</button>
+                            `);
+                });
+            });
+
+            // Click item
+            document.querySelectorAll('.device-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const id = parseInt(this.dataset.id);
+                    const d = state.devices.find(x => x.id === id);
+                    if (d) {
+                        this.querySelector('.device-detail-btn')?.click();
+                    }
+                });
+            });
+
+            document.getElementById('deviceCount').textContent = `(${state.devices.length})`;
+        }
+
+        function renderDeviceManagement() {
+            const container = document.getElementById('deviceManagementList');
+            container.innerHTML = state.devices.map(d => `
+                        <div class="flex items-center justify-between bg-gray-50 rounded-xl px-3 py-2">
+                            <div class="flex items-center gap-2">
+                                <span class="device-dot ${getDotColor(d.status)}"></span>
+                                <div>
+                                    <p class="text-xs font-medium text-gray-800">${d.name}</p>
+                                    <p class="text-[9px] text-gray-400">ID: ${d.id} | Durasi: ${d.duration}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="badge-xs ${getStatusBg(d.status)}">${d.status}</span>
+                                <button class="device-delete-btn text-red-400 hover:text-red-600 text-xs px-2 py-1 rounded-lg hover:bg-red-50 transition-colors" data-id="${d.id}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `).join('');
+
+            // Tombol hapus - BERFUNGSI
+            document.querySelectorAll('.device-delete-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const id = parseInt(this.dataset.id);
+                    if (state.devices.length <= 1) {
+                        showToast('⚠️ Minimal 1 perangkat harus ada!', 'warning');
+                        return;
+                    }
+                    const d = state.devices.find(x => x.id === id);
+                    if (!d) return;
+                    if (confirm(`❌ Hapus perangkat "${d.name}"?\nSemua data durasi akan hilang.`)) {
+                        state.devices = state.devices.filter(x => x.id !== id);
+                        addLog(`🗑️ Perangkat "${d.name}" dihapus`, 'danger');
+                        showToast(`🗑️ ${d.name} dihapus`, 'danger');
+                        renderAll();
+                    }
+                });
+            });
+        }
+
+        function renderLogs() {
+            const container = document.getElementById('logContainer');
+            const full = document.getElementById('logFullContainer');
+
+            const recentLogs = state.logs.slice(-8).reverse();
+
+            const items = recentLogs.map(l =>
+                `<div class="log-item">
+                            <span class="text-gray-400 text-[8px]">${l.time}</span>
+                            <span class="text-gray-700 flex-1 truncate">${l.msg}</span>
+                            <span class="badge-xs ${l.type === 'success' ? 'bg-green-100 text-green-700' : l.type === 'danger' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'}">${l.type}</span>
+                        </div>`
+            ).join('') || '<div class="text-center text-gray-400 text-[10px] py-3">Belum ada riwayat</div>';
+
+            container.innerHTML = items;
+
+            const fullItems = state.logs.slice().reverse().map(l =>
+                `<div class="log-item">
+                            <span class="text-gray-400 text-[8px]">${l.time}</span>
+                            <span class="text-gray-700 flex-1">${l.msg}</span>
+                            <span class="badge-xs ${l.type === 'success' ? 'bg-green-100 text-green-700' : l.type === 'danger' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'}">${l.type}</span>
+                        </div>`
+            ).join('') || '<div class="text-center text-gray-400 text-[10px] py-3">Belum ada riwayat</div>';
+
+            full.innerHTML = fullItems;
+        }
+
+        function renderMode() {
+            const isManual = state.mode === 'manual';
+            const manualBtn = document.getElementById('modeManual');
+            const autoBtn = document.getElementById('modeAuto');
+
+            manualBtn.className = isManual ? 'active-manual' : '';
+            autoBtn.className = !isManual ? 'active-auto' : '';
+
+            // Reset style if not active
+            if (!isManual) {
+                manualBtn.style.background = '#f3f4f6';
+                manualBtn.style.color = '#9ca3af';
+                manualBtn.style.boxShadow = 'none';
+                manualBtn.style.borderColor = 'transparent';
+            } else {
+                manualBtn.style.background = '#1e40af';
+                manualBtn.style.color = 'white';
+                manualBtn.style.boxShadow = '0 2px 8px rgba(30,64,175,0.3)';
+                manualBtn.style.borderColor = '#1e40af';
+            }
+
+            if (isManual) {
+                autoBtn.style.background = '#f3f4f6';
+                autoBtn.style.color = '#9ca3af';
+                autoBtn.style.boxShadow = 'none';
+                autoBtn.style.borderColor = 'transparent';
+            } else {
+                autoBtn.style.background = '#16a34a';
+                autoBtn.style.color = 'white';
+                autoBtn.style.boxShadow = '0 2px 8px rgba(22,163,74,0.3)';
+                autoBtn.style.borderColor = '#16a34a';
+            }
+        }
+
+        function renderAll() {
+            renderStatus();
+            renderSignal();
+            renderSchedule();
+            renderCost();
+            renderDevices();
+            renderDeviceManagement();
+            renderLogs();
+            renderMode();
+        }
+
+        // ============================================================
+        // CONTROL FUNCTIONS - PERANGKAT BISA NYALA BERSAMAAN
+        // ============================================================
+        function controlPump(action) {
+            if (action === 'START') {
+                if (state.pumpStatus === 'RUNNING') { showToast('⚠️ Sudah menyala', 'warning'); return; }
+                state.pumpStatus = 'RUNNING';
+                if (state.timerSeconds === 0) state.timerSeconds = 1;
+                addLog('✅ Pompa dinyalakan', 'success');
+                showToast('🟢 Pompa ON', 'success');
+            } else if (action === 'STOP') {
+                if (state.pumpStatus === 'OFF') { showToast('⚠️ Sudah mati', 'warning'); return; }
+                state.pumpStatus = 'OFF';
+                // Simpan durasi ke SEMUA device yang ON
+                const runningDevices = state.devices.filter(d => d.status === 'ON');
+                if (runningDevices.length > 0) {
+                    runningDevices.forEach(dev => {
+                        dev.totalSeconds = (dev.totalSeconds || 0) + state.timerSeconds;
+                        dev.duration = formatTime(dev.totalSeconds);
+                    });
+                }
+                state.timerSeconds = 0;
+                addLog('🔴 Pompa dimatikan', 'danger');
+                showToast('🔴 Pompa OFF', 'danger');
+            }
+            renderAll();
+        }
+
+        function controlDevice(id, action) {
+            const d = state.devices.find(x => x.id === id);
+            if (!d) return;
+
+            if (action === 'ON') {
+                if (d.status === 'ON') { showToast(`⚠️ ${d.name} sudah ON`, 'warning'); return; }
+                d.status = 'ON';
+                if (d.totalSeconds === undefined) d.totalSeconds = 0;
+                d.duration = formatTime(d.totalSeconds || 0);
+                addLog(`✅ ${d.name} dinyalakan`, 'success');
+                showToast(`🟢 ${d.name} ON`, 'success');
+            } else {
+                if (d.status === 'OFF') { showToast(`⚠️ ${d.name} sudah OFF`, 'warning'); return; }
+                // Simpan durasi sebelum mati
+                if (d.totalSeconds === undefined) d.totalSeconds = 0;
+                // Tambahkan timer saat ini ke total
+                if (d.status === 'ON') {
+                    d.totalSeconds += state.timerSeconds;
+                }
+                d.status = 'OFF';
+                d.duration = formatTime(d.totalSeconds || 0);
+                addLog(`🔴 ${d.name} dimatikan`, 'danger');
+                showToast(`🔴 ${d.name} OFF`, 'danger');
+            }
+            renderAll();
+            closeModal();
+        }
+
+        function addLog(msg, type = 'info') {
+            const now = new Date();
+            const time = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            state.logs.push({ time, msg, type });
+            if (state.logs.length > 100) state.logs.shift();
+            renderLogs();
+        }
+
+        // ============================================================
+        // NAVIGATION
+        // ============================================================
+        function navigateTo(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.querySelector(`.nav-item[data-page="${pageId}"]`)?.classList.add('active');
+            state.currentPage = pageId;
+            renderAll();
+        }
+
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                navigateTo(this.dataset.page);
+            });
+        });
+
+        // ============================================================
+        // TIMER LOOP
+        // ============================================================
+        function startTimer() {
+            if (state.timerInterval) clearInterval(state.timerInterval);
+            state.timerInterval = setInterval(() => {
+                if (state.pumpStatus === 'RUNNING') {
+                    state.timerSeconds++;
+
+                    // Update SEMUA device yang ON (bisa nyala bersamaan)
+                    const runningDevices = state.devices.filter(d => d.status === 'ON');
+                    runningDevices.forEach(dev => {
+                        dev.totalSeconds = (dev.totalSeconds || 0) + 1;
+                        dev.duration = formatTime(dev.totalSeconds);
+                    });
+
+                    renderStatus();
+                    renderCost();
+                    renderDevices();
+                    renderDeviceManagement();
+                }
+            }, 1000);
+        }
+
+        function startSignal() {
+            if (state.signalInterval) clearInterval(state.signalInterval);
+            state.signalInterval = setInterval(() => {
+                const change = Math.floor(Math.random() * 8) - 4;
+                state.signalStrength = Math.min(100, Math.max(25, state.signalStrength + change));
+                renderSignal();
+            }, 5000);
+        }
+
+        // ============================================================
+        // EVENT LISTENERS
+        // ============================================================
+
+        // Mode - DENGAN WARNA PEMBEDA JELAS
+        document.getElementById('modeManual').addEventListener('click', function() {
+            state.mode = 'manual';
+            renderMode();
+            showToast('🔧 Mode Manual (Biru)', 'info');
+        });
+        document.getElementById('modeAuto').addEventListener('click', function() {
+            state.mode = 'auto';
+            renderMode();
+            showToast('⏱️ Mode Auto (Hijau)', 'info');
+            addLog('⏱️ Mode Auto diaktifkan', 'info');
+        });
+
+        // Control
+        document.getElementById('btnStart').addEventListener('click', () => controlPump('START'));
+        document.getElementById('btnStop').addEventListener('click', () => controlPump('STOP'));
+
+        // Edit schedule
+        document.getElementById('editScheduleBtn').addEventListener('click', function() {
+            navigateTo('pageTimer');
+            showToast('⏱️ Atur timer', 'info');
+        });
+
+        // Edit cost
+        document.getElementById('editCostBtn').addEventListener('click', function() {
+            navigateTo('pageTimer');
+            showToast('💰 Atur biaya per jam', 'info');
+        });
+
+        // Save timer
+        document.getElementById('saveTimerBtn').addEventListener('click', function() {
+            const on = document.getElementById('timerOnInput').value;
+            const off = document.getElementById('timerOffInput').value;
+            const cost = parseInt(document.getElementById('costPerHourInput').value) || 5000;
+
+            if (on >= off) { showToast('⚠️ ON harus sebelum OFF!', 'danger'); return; }
+
+            state.scheduleOn = on;
+            state.scheduleOff = off;
+            state.costPerHour = cost;
+            addLog(`⏱️ Timer: ${on}-${off}, Biaya: Rp${cost}/jam`, 'success');
+            showToast('✅ Timer disimpan!', 'success');
+            renderAll();
+            navigateTo('pageHome');
+        });
+
+        // Reset timer
+        document.getElementById('resetTimerBtn').addEventListener('click', function() {
+            state.scheduleOn = '06:00';
+            state.scheduleOff = '18:00';
+            state.costPerHour = 5000;
+            addLog('🔄 Timer direset', 'warning');
+            showToast('🔄 Timer direset', 'warning');
+            renderAll();
+        });
+
+        // Add device
+        document.getElementById('addDeviceBtn').addEventListener('click', function() {
+            openModal(`
+                        <h4 class="font-bold text-gray-800 text-sm mb-2">📷 Tambah Perangkat</h4>
+                        <p class="text-xs text-gray-400 mb-3">Scan QR Code atau isi manual</p>
+                        <input id="newDeviceName" type="text" placeholder="Nama perangkat" class="w-full p-2 border border-gray-200 rounded-xl text-sm mb-2" />
+                        <button id="confirmAddDevice" class="btn-farm bg-green-600 text-white text-sm">
+                            <i class="fas fa-plus"></i> Tambah
+                        </button>
+                        <button class="btn-farm bg-gray-200 text-gray-700 text-sm mt-1.5" onclick="closeModal()">Batal</button>
+                    `);
+
+            document.getElementById('confirmAddDevice').addEventListener('click', function() {
+                const name = document.getElementById('newDeviceName').value.trim() || `Device ${state.deviceCounter}`;
+                state.devices.push({
+                    id: state.deviceCounter++,
+                    name: name,
+                    status: 'OFF',
+                    duration: '--:--:--',
+                    totalSeconds: 0
+                });
+                addLog(`📱 Perangkat ditambahkan: ${name}`, 'success');
+                showToast(`✅ ${name} ditambahkan`, 'success');
+                renderAll();
+                closeModal();
+            });
+        });
+
+        document.getElementById('addDeviceMgmtBtn').addEventListener('click', function() {
+            document.getElementById('addDeviceBtn').click();
+        });
+
+        // Clear logs - BERFUNGSI
+        document.getElementById('clearLogBtn').addEventListener('click', function() {
+            if (state.logs.length === 0) { showToast('📭 Kosong', 'info'); return; }
+            if (confirm('🗑️ Hapus semua riwayat?')) {
+                state.logs = [];
+                renderAll();
+                showToast('🗑️ Riwayat dihapus', 'info');
+            }
+        });
+        document.getElementById('clearLogFullBtn').addEventListener('click', function() {
+            document.getElementById('clearLogBtn').click();
+        });
+
+        // Toggles
+        document.getElementById('toggleNotif').addEventListener('click', function() {
+            this.classList.toggle('active');
+            state.settings.notifications = this.classList.contains('active');
+            showToast(state.settings.notifications ? '🔔 Notif aktif' : '🔕 Notif nonaktif', 'info');
+        });
+        document.getElementById('toggleRetry').addEventListener('click', function() {
+            this.classList.toggle('active');
+            state.settings.autoRetry = this.classList.contains('active');
+            showToast(state.settings.autoRetry ? '🔄 Auto-retry aktif' : '🔄 Auto-retry nonaktif', 'info');
+        });
+
+        // Reset all
+        document.getElementById('resetAllBtn').addEventListener('click', function() {
+            if (!confirm('Reset semua pengaturan?')) return;
+            state.settings = { notifications: true, autoRetry: true };
+            document.getElementById('toggleNotif').classList.add('active');
+            document.getElementById('toggleRetry').classList.add('active');
+            state.scheduleOn = '06:00';
+            state.scheduleOff = '18:00';
+            state.costPerHour = 5000;
+            state.pumpStatus = 'OFF';
+            state.timerSeconds = 0;
+            state.logs = [];
+            state.devices.forEach(d => { d.totalSeconds = 0;
+                d.duration = '--:--:--';
+                d.status = 'OFF'; });
+            addLog('🔄 Sistem direset', 'warning');
+            showToast('🔄 Reset selesai', 'warning');
+            renderAll();
+            navigateTo('pageHome');
+        });
+
+        // Notifications
+        document.getElementById('notifBtn').addEventListener('click', function() {
+            const list = state.notifications.map((n, i) =>
+                `<div class="flex items-center gap-2 text-xs border-b border-gray-100 py-1.5 last:border-0">
+                            <span class="text-gray-400">${i+1}.</span>
+                            <span class="text-gray-700">${n}</span>
+                        </div>`
+            ).join('') || '<p class="text-gray-400 text-center py-2 text-xs">Kosong</p>';
+            openModal(`
+                        <h4 class="font-bold text-gray-800 text-sm mb-2">🔔 Notifikasi</h4>
+                        <div class="max-h-48 overflow-y-auto">${list}</div>
+                        <button class="btn-farm bg-gray-200 text-gray-700 text-sm mt-2" onclick="closeModal()">Tutup</button>
+                    `);
+        });
+
+        // Menu
+        document.getElementById('menuBtn').addEventListener('click', function() {
+            openModal(`
+                        <h4 class="font-bold text-gray-800 text-sm mb-2">📋 Menu</h4>
+                        ${['Home','Timer','Device','Log','Settings'].map(p =>
+                            `<button class="w-full text-left px-3 py-2 rounded-xl bg-gray-50 hover:bg-gray-100 text-sm mb-1" onclick="closeModal(); navigateTo('page${p}')">
+                                ${p === 'Home' ? '🏠' : p === 'Timer' ? '⏱️' : p === 'Device' ? '📦' : p === 'Log' ? '📋' : '⚙️'} ${p}
+                            </button>`
+                        ).join('')}
+                        <button class="btn-farm bg-gray-200 text-gray-700 text-sm mt-1" onclick="closeModal()">Tutup</button>
+                    `);
+        });
+
+        // ============================================================
+        // KEYBOARD SHORTCUTS
+        // ============================================================
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '1') controlPump('START');
+            if (e.key === '2') controlPump('STOP');
+            if (e.key === 'h') navigateTo('pageHome');
+            if (e.key === 't') navigateTo('pageTimer');
+            if (e.key === 'd') navigateTo('pageDevice');
+            if (e.key === 'l') navigateTo('pageLog');
+            if (e.key === 's') navigateTo('pageSettings');
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        function init() {
+            addLog('🌾 Smart Pump siap', 'success');
+            addLog('📡 Sinyal terdeteksi', 'info');
+            addLog('✅ Sistem normal', 'success');
+
+            if (state.devices.length > 0) {
+                document.getElementById('deviceNameLabel').textContent = state.devices[0].name;
+            }
+
+            renderAll();
+            startTimer();
+            startSignal();
+            console.log('🌾 Smart Pump loaded!');
+            console.log('Shortcuts: 1=ON, 2=OFF, h=Home, t=Timer, d=Device, l=Log, s=Settings');
+        }
+
+        init();
+    </script>
+
+</body>
+</html>
